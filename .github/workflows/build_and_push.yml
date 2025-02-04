@@ -1,0 +1,20 @@
+name: build_and_push
+
+on:
+  push:
+    branches: ["podman-build"]
+
+jobs:
+  build-push-docker-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: checkout repo
+        uses: action/checkout@v4
+      - name: build and push image
+        run: |
+          podman login -u isithin --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          podman build -t ghcr.io/isithin/bi:demo -f ./app/Dockerfile ./app
+          podman push ghcr.io/isithin/bi:demo
