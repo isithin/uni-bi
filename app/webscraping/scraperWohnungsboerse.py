@@ -191,9 +191,7 @@ def run():
                                 re.DOTALL,
                             )
                             warm_price = re.sub(r"\.", "", warm_price.group(1))
-                            print("getan")
                             if "kA" in warm_price: warm_price= "k.A."
-                            print("getan2")
                             estate_data["Warm Price"] = warm_price
 
                             utilities_cost = re.search(
