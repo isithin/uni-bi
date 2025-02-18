@@ -151,7 +151,6 @@ def run():
                         try:
                             room_match = room_match.group(1)
                             estate_data["Number of Rooms"] = room_match
-                            print(room_match)
                         except:
                             pass
 
@@ -196,7 +195,6 @@ def run():
                             if "kA" in warm_price: warm_price= "k.A."
                             print("getan2")
                             estate_data["Warm Price"] = warm_price
-                            print(warm_price)
 
                             utilities_cost = re.search(
                                 r"Nebenkosten: </td> <td> (.*?)&nbsp;",
