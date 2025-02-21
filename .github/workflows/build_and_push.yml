@@ -13,32 +13,26 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
-      - name: build and push image
+      - name: build and push mysql image
         run: |
           podman login -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
-          podman build -t ghcr.io/isithin/bi:demo -f ./app/Dockerfile ./app
-          podman push ghcr.io/isithin/bi:demo
+          podman build -t ghcr.io/isithin/bi-db:demo -f ./app/Dockerfile-mysql ./app
+          podman push ghcr.io/isithin/bi-db:demo        
+      - name: build and push scraper image
+        run: |
+          podman login -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          podman build -t ghcr.io/isithin/bi-scraper:demo -f ./app/Dockerfile-scraper ./app
+          podman push ghcr.io/isithin/bi-scraper:demo
 
-  run-mysql:
+  test:
     needs: build-push-image
     runs-on: ubuntu-latest
     steps:
-      - name: Create DB Directory
-        run: mkdir -p ${{ github.workspace }}/mysql_data
-      - name: Run MySQL Container with External Volume
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Run compose
         run: |
-          podman run -d \
-            --name bi_app \
-            -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
-            -e MYSQL_DATABASE=bi \
-            -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
-            -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
-            -v ${{ github.workspace }}/mysql_data:/var/lib/mysql \
-            -p 3306:3306 \
-            ghcr.io/isithin/bi:demo         
-    
-      - name: Verify MySQL Container
-        run: |
-          sleep 10
-          podman ps -a
-          podman logs bi_app
+          podman-compose up -d
+          sleep
+          podman logs python_container
+          podman logs mysql_container
