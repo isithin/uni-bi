@@ -1,0 +1,11 @@
+FROM python:3.9
+
+RUN pip install --no-cache-dir mysql-connector-python
+
+ADD . /src
+
+WORKDIR /src
+
+COPY app /app
+
+CMD ["python3", "connector-test.py"]
