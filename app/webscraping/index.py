@@ -9,10 +9,10 @@ if __name__ == "__main__":
     scraperImmowelt.run()
     print("")
 
-    # # Wohnungsboerse scraper starten
-    # print("📡 Scraping Wohnungsboerse...")
-    # scraperWohnungsboerse.run()
-    # print("")
+    # Wohnungsboerse scraper starten
+    print("📡 Scraping Wohnungsboerse...")
+    scraperWohnungsboerse.run()
+    print("")
 
     # Ergebnisse anzeigen
     print("✅ Both scrapers have finished.")
