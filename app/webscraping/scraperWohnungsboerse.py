@@ -42,7 +42,7 @@ def run():
         base_url = "https://www.wohnungsboerse.net/searches/index?estate_marketing_types=miete%2C1&marketing_type=miete&estate_types%5B0%5D=1&is_rendite=0&cities%5B0%5D=Berlin&term=Berlin&page={}"
 
         # Durch die ersten 50 Seiten der Suchergebnisse iterieren
-        for page_number in range(1, 50):
+        for page_number in range(1, 2):
             # URL für die aktuelle Seite erstellen
             url = base_url.format(page_number)
             print("")
@@ -143,7 +143,7 @@ def run():
 
                     # Anzahl der Zimmer extrahieren
                     room_match = re.search(
-                        r'<dt>Zimmer<\/dt>\s*<dd class="font-bold md:text-h3">\s*([\d.]+)\s*<\/dd>',
+                        r'<dt>Zimmer<\/dt>\s*<dd class="font-bold md:text-h3">\s*([\d\.?\d?]+)\s*<\/dd>',
                         estate,
                     )
                     # Anzahl der Zimmer in Datenstruktur speichern
@@ -191,6 +191,7 @@ def run():
                                 re.DOTALL,
                             )
                             warm_price = re.sub(r"\.", "", warm_price.group(1))
+                            if "kA" in warm_price: warm_price= "k.A."
                             estate_data["Warm Price"] = warm_price
 
                             utilities_cost = re.search(
@@ -264,6 +265,8 @@ def run():
                                     estate_data["Garden"] = "Verfügbar"
                                 elif "terrasse" in match.lower():
                                     estate_data["Terrace"] = "Verfügbar"
+                                elif "aufzug" in match.lower():
+                                    estate_data["Elevator"] = "Verfügbar"
                                 elif (
                                     "einbauküche" in match.lower()
                                     or "ebk" in match.lower()

@@ -43,7 +43,7 @@ def run():
         base_url = "https://www.immowelt.de/suche/berlin/wohnungen/mieten?d=true&sd=DESC&sf=TIMESTAMP&sp={}"
 
         # Durch die ersten 100 Seiten der Suchergebnisse iterieren
-        for page_number in range(1, 100):
+        for page_number in range(1, 10):
             # URL für die aktuelle Seite erstellen
             url = base_url.format(page_number)
             print("")
