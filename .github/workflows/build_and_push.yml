@@ -16,12 +16,12 @@ jobs:
       - name: build and push mysql image
         run: |
           podman login -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
-          podman build -t ghcr.io/isithin/bi-db:demo -f ./app/Dockerfile-mysql ./app
+          podman build -t ghcr.io/isithin/bi-db:demo -f ./app/Dockerfile-mysql .
           podman push ghcr.io/isithin/bi-db:demo        
       - name: build and push scraper image
         run: |
           podman login -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
-          podman build -t ghcr.io/isithin/bi-scraper:demo -f ./app/Dockerfile-scraper ./app
+          podman build -t ghcr.io/isithin/bi-scraper:demo -f ./app/Dockerfile-scraper .
           podman push ghcr.io/isithin/bi-scraper:demo
 
   test:
