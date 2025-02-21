@@ -38,6 +38,3 @@ jobs:
       - name: run compose
         run: |
           podman-compose up -d
-          sleep
-          podman logs python_container
-          podman logs mysql_container
