@@ -1,17 +1,30 @@
 # uni-bi
 
-Usage:
+## Usage:
 
-To run locally create .env file in project root with:
+
+### To run locally create .env file in project root with:
+
 MYSQL_ROOT_PASSWORD=chooseWisely
+
 MYSQL_DATABASE=bi
+
 MYSQL_USER=bi_user
+
 MYSQL_PASSWORD=chooseWisely
 
-Pull images:
+
+
+### Pull images:
+
 podman image pull ghcr.io/isithin/bi-db:demo
+
 podman image pull ghcr.io/isithin/bi-scraper:demo
+
 podman image pull ghcr.io/isithin/bi-ui:demo
 
-Run Containers:
+
+
+### Run Containers:
+
 podman-compose up -d
