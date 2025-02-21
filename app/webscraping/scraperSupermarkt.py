@@ -5,14 +5,12 @@ from urllib.request import urlopen
 
 
 def run():
-<<<<<<< HEAD
     supermarkets = []
-=======
     # Liste mit typischen Discountern (kann erweitert werden)
     discounter_keywords = [
     "Aldi", "Lidl", "Penny", "Netto", "Norma"
     ]
->>>>>>> bd15488 (add DB-insertation to scraperSupermarkt)
+    supermarkets = []
     BASE_URL = "https://berlin.kauperts.de/Adressen/Supermarkt/{letter}"
     # Durch alle Buchstaben A-Z iterieren
     for letter in string.ascii_uppercase:  # ['A', 'B', ..., 'Z']
@@ -31,20 +29,10 @@ def run():
         for name, adress in zip(marketNames, locations):
             # Adressen 'schön machen'
             adress = adress.replace("&ndash;\n", " ").replace("&nbsp;", " ").replace("\n      ", "").replace("        ", "")
-<<<<<<< HEAD
+
             # Postleitzahl aus Adresse herausfiltern
             plzPattern = r"\d\d\d\d\d"
             plz = re.findall(plzPattern, adress)
-            # Postleitzahl aus Adresse herausfiltern
-            plzPattern = r"\d\d\d\d\d"
-            plz = re.findall(plzPattern, adress)
-            # Alle Daten in supermarkets gespeichert
-            supermarkets.append({"plz": plz,"name": name.replace("&nbsp;", ""), "adresse": adress})
-
-
-    return supermarkets
-    # Hier später einfügen in DB
-=======
             # PLZ mit Regex extrahieren (5-stellige Zahl am Anfang der Adresse)
             plz_match = re.search(r"\b\d{5}\b", adress)
             plz = plz_match.group(0) if plz_match else "Unbekannt"
@@ -57,8 +45,8 @@ def run():
                                       plz + ", " +
                                       name + ", " +
                                       discounter + ")")
->>>>>>> bd15488 (add DB-insertation to scraperSupermarkt)
 
 
 
 run()
+
