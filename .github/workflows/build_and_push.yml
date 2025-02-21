@@ -28,6 +28,8 @@ jobs:
     needs: build-push-image
     runs-on: ubuntu-latest
     steps:
+      - name: install podman-compose
+        run: apt install podman-compose
       - name: checkout repo
         uses: actions/checkout@v4
       - name: create internal network
