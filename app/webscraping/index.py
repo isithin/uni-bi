@@ -1,5 +1,6 @@
 import scraperImmowelt
 import scraperWohnungsboerse
+import scraperSupermarkt
 
 # Diese Datei ausführen, um die beiden Scraper zu starten
 if __name__ == "__main__":
@@ -14,6 +15,12 @@ if __name__ == "__main__":
     scraperWohnungsboerse.run()
     print("")
 
+    # Supermärkte scraper starten
+    print("📡 Scraping Supermärkte...")
+    scraperSupermarkt.run()
+    print("")
+
+
     # Ergebnisse anzeigen
-    print("✅ Both scrapers have finished.")
+    print("✅ All scrapers have finished.")
     print("💾 The data has been saved to the data folder.")
