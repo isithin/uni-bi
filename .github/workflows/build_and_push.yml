@@ -35,7 +35,7 @@ jobs:
             -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
             -v ${{ github.workspace }}/mysql_data:/var/lib/mysql \
             -p 3306:3306 \
-            bi:demo          
+            ghcr.io/isithin/bi:demo         
     
       - name: Verify MySQL Container
         run: |
