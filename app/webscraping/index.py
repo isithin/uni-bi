@@ -1,5 +1,6 @@
 import scraperImmowelt
 import scraperWohnungsboerse
+import scraperSupermarkt
 
 # Diese Datei ausführen, um die beiden Scraper zu starten
 if __name__ == "__main__":
