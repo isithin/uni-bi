@@ -13,8 +13,10 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - ./mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
+    #ports:
+    #  - "3306:3306"
+    networks:
+      - bi_net
 
   python-app:
     image: ghcr.io/isithin/bi-scraper:demo
@@ -23,8 +25,14 @@ services:
       - mysql
     working_dir: /app
     environment:
-      MYSQL_HOST: mysql_container
+      MYSQL_HOST: mysql
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     #command: ["python3", "script.py"]
+    networks:
+      - bi_net
+
+networks:
+  bi_net:
+    driver: bridge
