@@ -28,9 +28,11 @@ jobs:
     needs: build-push-image
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
+      - name: checkout repo
         uses: actions/checkout@v4
-      - name: Run compose
+      - name: create internal network
+        run: podman network create bi_net
+      - name: run compose
         run: |
           podman-compose up -d
           sleep
