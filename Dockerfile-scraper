@@ -8,4 +8,4 @@ WORKDIR /src
 
 COPY app /app
 
-CMD ["python3", "connector-test.py"]
+#CMD ["python3", "connector-test.py"]
