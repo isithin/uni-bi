@@ -30,7 +30,7 @@ def create_table(cursor):
     )
     cursor.execute(
         """
-        CREATE TABLE Bezirk (
+        CREATE TABLE IF NOT EXISTS Bezirk (
             Name                 VARCHAR(50) NOT NULL,
             Durchschnittsalter   DECIMAL(4,1), 
             Durchschnittseinkommen DECIMAL(10,2),
@@ -44,7 +44,7 @@ def create_table(cursor):
     )
     cursor.execute(
         """
-        CREATE TABLE Postleitgebiet (
+        CREATE TABLE IF NOT EXISTS Postleitgebiet (
             Postleitzahl         VARCHAR(10) NOT NULL,
             FK_Bezirksname       VARCHAR(50) NOT NULL,
             PRIMARY KEY (Postleitzahl),
@@ -56,7 +56,7 @@ def create_table(cursor):
     )
     cursor.execute(
         """
-        CREATE TABLE Immobilie (
+        CREATE TABLE IF NOT EXISTS Immobilie (
             ID                   INT NOT NULL,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
             Preis_warm           DECIMAL(10,2),
@@ -71,7 +71,7 @@ def create_table(cursor):
     )
     cursor.execute(
         """
-        CREATE TABLE Supermarkt (
+        CREATE TABLE IF NOT EXISTS Supermarkt (
             ID                   INT NOT NULL,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
             Name                 VARCHAR(100),
@@ -85,7 +85,7 @@ def create_table(cursor):
     )
     cursor.execute(
         """
-        CREATE TABLE Haltestelle (
+        CREATE TABLE IF NOT EXISTS Haltestelle (
             ID                   INT NOT NULL,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
             Transportmittel      VARCHAR(50),
@@ -98,7 +98,7 @@ def create_table(cursor):
     )
     cursor.execute(
         """
-        CREATE TABLE Freizeitangebot (
+        CREATE TABLE IF NOT EXISTS Freizeitangebot (
             ID                   INT NOT NULL,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
             Art                  VARCHAR(50),
