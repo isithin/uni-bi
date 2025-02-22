@@ -21,13 +21,14 @@ def run():
         locationPattern = r"<td class=\"secondary zip-city\">\n(.*\n.*\n.*)<\/td>"
         locations = re.findall(locationPattern, html)
         for name, adress in zip(marketNames, locations):
-            # Adressen 'schön machen'
+            # Adressen und Namen 'schön machen'
+            name = name.replace("&nbsp;", "")
             adress = adress.replace("&ndash;\n", " ").replace("&nbsp;", " ").replace("\n      ", "").replace("        ", "")
             # Postleitzahl aus Adresse herausfiltern
             plzPattern = r"\d\d\d\d\d"
             plz = re.findall(plzPattern, adress)
             # Alle Daten in supermarkets gespeichert
-            supermarkets.append({"plz": plz,"name": name.replace("&nbsp;", ""), "adresse": adress})
+            supermarkets.append({"plz": plz,"name": name, "adresse": adress})
 
 
     return supermarkets
