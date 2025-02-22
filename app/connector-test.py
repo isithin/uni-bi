@@ -38,7 +38,6 @@ def read_data(cursor):
     for row in cursor.fetchall():
         print(row)
 
-
 def main():
     db = connect()
     if db is not None:
