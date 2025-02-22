@@ -2,9 +2,9 @@ FROM python:3.9
 
 RUN pip install --no-cache-dir mysql-connector-python
 
-ADD . /src
+ADD app /app
 
-WORKDIR /src
+WORKDIR /app
 
 COPY app /app
 
