@@ -24,9 +24,9 @@ def run():
             # Adressen und Namen 'schön machen'
             name = name.replace("&nbsp;", "")
             adress = adress.replace("&ndash;\n", " ").replace("&nbsp;", " ").replace("\n      ", "").replace("        ", "")
-            # Postleitzahl aus Adresse herausfiltern
-            plzPattern = r"\d\d\d\d\d"
-            plz = re.findall(plzPattern, adress)
+            # PLZ mit Regex extrahieren (5-stellige Zahl am Anfang der Adresse)
+            plz_match = re.search(r"\b\d{5}\b", adress)
+            plz = plz_match.group(0) if plz_match else "Unbekannt"
             # Alle Daten in supermarkets gespeichert
             supermarkets.append({"plz": plz,"name": name, "adresse": adress})
 
