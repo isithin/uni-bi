@@ -28,6 +28,88 @@ def create_table(cursor):
         )
         """
     )
+    cursor.execute(
+        """
+        CREATE TABLE Bezirk (
+            Name                 VARCHAR(50) NOT NULL,
+            Durchschnittsalter   DECIMAL(4,1), 
+            Durchschnittseinkommen DECIMAL(10,2),
+            Schulabschluss       VARCHAR(50),
+            Migrationsrate       DECIMAL(5,2),
+            Kriminalitaetsrate   DECIMAL(5,2),
+            Parkplatz_pro_Kopf   DECIMAL(5,2),
+            PRIMARY KEY (Name)
+        );
+        """
+    )
+    cursor.execute(
+        """
+        CREATE TABLE Postleitgebiet (
+            Postleitzahl         VARCHAR(10) NOT NULL,
+            FK_Bezirksname       VARCHAR(50) NOT NULL,
+            PRIMARY KEY (Postleitzahl),
+            FOREIGN KEY (FK_Bezirksname) REFERENCES Bezirk(Name)
+              ON UPDATE CASCADE 
+              ON DELETE RESTRICT
+        );
+        """
+    )
+    cursor.execute(
+        """
+        CREATE TABLE Immobilie (
+            ID                   INT NOT NULL,
+            FK_Postleitzahl      VARCHAR(10) NOT NULL,
+            Preis_warm           DECIMAL(10,2),
+            Groesse              INT,
+            Parkplaetze          INT,
+            PRIMARY KEY (ID),
+            FOREIGN KEY (FK_Postleitzahl) REFERENCES Postleitgebiet(Postleitzahl)
+              ON UPDATE CASCADE
+              ON DELETE CASCADE
+        );
+        """
+    )
+    cursor.execute(
+        """
+        CREATE TABLE Supermarkt (
+            ID                   INT NOT NULL,
+            FK_Postleitzahl      VARCHAR(10) NOT NULL,
+            Name                 VARCHAR(100),
+            Discounter           BOOLEAN,          
+            PRIMARY KEY (ID),
+            FOREIGN KEY (FK_Postleitzahl) REFERENCES Postleitgebiet(Postleitzahl)
+              ON UPDATE CASCADE
+              ON DELETE CASCADE
+        );
+        """
+    )
+    cursor.execute(
+        """
+        CREATE TABLE Haltestelle (
+            ID                   INT NOT NULL,
+            FK_Postleitzahl      VARCHAR(10) NOT NULL,
+            Transportmittel      VARCHAR(50),
+            PRIMARY KEY (ID),
+            FOREIGN KEY (FK_Postleitzahl) REFERENCES Postleitgebiet(Postleitzahl)
+              ON UPDATE CASCADE
+              ON DELETE CASCADE
+        );
+        """
+    )
+    cursor.execute(
+        """
+        CREATE TABLE Freizeitangebot (
+            ID                   INT NOT NULL,
+            FK_Postleitzahl      VARCHAR(10) NOT NULL,
+            Art                  VARCHAR(50),
+            PRIMARY KEY (ID),
+            FOREIGN KEY (FK_Postleitzahl) REFERENCES Postleitgebiet(Postleitzahl)
+              ON UPDATE CASCADE
+              ON DELETE CASCADE
+        );
+        """
+    )
+
  
 def insert_data(cursor, db):
     cursor.execute("INSERT INTO example (name) VALUES ('MiiiTest')")
