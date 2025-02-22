@@ -13,8 +13,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - ./mysql_data:/var/lib/mysql
-    #ports:
-    #  - "3306:3306"
+    ports:
+      - "3306:3306"
     networks:
       - bi_net
 
@@ -29,7 +29,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-    #command: ["python3", "script.py"]
+    command: ["python3", "connector-test.py"]
     networks:
       - bi_net
 
