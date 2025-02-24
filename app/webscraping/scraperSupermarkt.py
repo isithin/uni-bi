@@ -5,7 +5,6 @@ from urllib.request import urlopen
 
 
 def run():
-    supermarkets = []
     # Liste mit typischen Discountern (kann erweitert werden)
     discounter_keywords = [
     "Aldi", "Lidl", "Penny", "Netto", "Norma"
@@ -30,10 +29,6 @@ def run():
             # Adressen und Namen 'schön machen'
             name = name.replace("&nbsp;", "")
             adress = adress.replace("&ndash;\n", " ").replace("&nbsp;", " ").replace("\n      ", "").replace("        ", "")
-
-            # Postleitzahl aus Adresse herausfiltern
-            plzPattern = r"\d\d\d\d\d"
-            plz = re.findall(plzPattern, adress)
             # PLZ mit Regex extrahieren (5-stellige Zahl am Anfang der Adresse)
             plz_match = re.search(r"\b\d{5}\b", adress)
             plz = plz_match.group(0) if plz_match else "Unbekannt"
