@@ -3,7 +3,7 @@ version: '3.8'
 
 services:
   mysql:
-    image: ghcr.io/isithin/bi-db:demo
+    image: mysql #ghcr.io/isithin/bi-db:demo
     container_name: mysql_container
     restart: always
     environment:
@@ -30,6 +30,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     command: ["python3", "connector-test.py"]
+    volumes:
+      - ./app:/app
     networks:
       - bi_net
 
