@@ -15,10 +15,6 @@ if __name__ == "__main__":
     scraperWohnungsboerse.run()
     print("")
 
-    # Supermärkte scraper starten
-    print("📡 Scraping Supermärkte...")
-    scraperSupermarkt.run()
-    print("")
 
 
     # Ergebnisse anzeigen
