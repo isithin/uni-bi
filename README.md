@@ -17,8 +17,6 @@ MYSQL_PASSWORD=chooseWisely
 
 ### Pull images:
 
-podman image pull ghcr.io/isithin/bi-db:demo
-
 podman image pull ghcr.io/isithin/bi-scraper:demo
 
 podman image pull ghcr.io/isithin/bi-ui:demo
