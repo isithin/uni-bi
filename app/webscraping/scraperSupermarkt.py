@@ -1,10 +1,10 @@
 import re
 import string
+import connectorTest
 from urllib.request import urlopen
 
 
 def run():
-    supermarkets = []
     # Liste mit typischen Discountern (kann erweitert werden)
     discounter_keywords = [
     "Aldi", "Lidl", "Penny", "Netto", "Norma"
@@ -28,18 +28,19 @@ def run():
             # Adressen und Namen 'schön machen'
             name = name.replace("&nbsp;", "")
             adress = adress.replace("&ndash;\n", " ").replace("&nbsp;", " ").replace("\n      ", "").replace("        ", "")
-            # discounter? ermitteln
-            discounter = any(discounter in name for discounter in discounter_keywords)
             # PLZ mit Regex extrahieren (5-stellige Zahl am Anfang der Adresse)
             plz_match = re.search(r"\b\d{5}\b", adress)
             plz = plz_match.group(0) if plz_match else "Unbekannt"
-            # Alle Daten in supermarkets gespeichert
-            supermarkets.append({"plz": plz,"name": name, "adresse": adress, "discounter?": discounter})
+            # Ermitteln, ob Discounter
+            discounter = any(discounter in name for discounter in discounter_keywords)
+            # Alle Daten in Datenbank gespeichert
+            connectorTest.insert_data(connectorTest.cursor,
+                                      connectorTest.db,
+                                      "INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+
+                                      plz + ", " +
+                                      name + ", " +
+                                      discounter + ")")
 
 
-    return supermarkets
-    # Hier später einfügen in DB
 
-
-
-print(run())
+run()
