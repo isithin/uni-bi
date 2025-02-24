@@ -14,11 +14,11 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
-      - name: build and push mysql image
-        run: |
-          podman login -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
-          podman build -t ghcr.io/isithin/bi-db:demo -f Dockerfile-mysql .
-          podman push ghcr.io/isithin/bi-db:demo        
+#      - name: build and push mysql image
+#        run: |
+#          podman login -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
+#          podman build -t ghcr.io/isithin/bi-db:demo -f Dockerfile-mysql .
+#          podman push ghcr.io/isithin/bi-db:demo        
       - name: build and push scraper image
         run: |
           podman login -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
