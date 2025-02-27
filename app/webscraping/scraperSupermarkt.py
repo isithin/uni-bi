@@ -1,10 +1,16 @@
+import os
 import re
 import string
-import connectorTest
+
+import mysql
+from ...app import connectorTest
 from urllib.request import urlopen
 
-
 def run():
+    db=connect()
+    scrape(db, db.cursor())
+
+def scrape(db, cursor):
     # Liste mit typischen Discountern (kann erweitert werden)
     discounter_keywords = [
     "Aldi", "Lidl", "Penny", "Netto", "Norma"
@@ -35,11 +41,26 @@ def run():
             discounter = any(discounter in name for discounter in discounter_keywords)
             # Alle Daten in Datenbank gespeichert
             data = plz + ", " + name + ", " + discounter
-            connectorTest.insert_data(connectorTest.cursor,
+            cursor.execute(connectorTest.cursor,
                                       connectorTest.db,
                                       "INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
+            db.commit()
+        cursor.close()
+        db.close()
 
-
+# Verbindung zu MySQL herstellen
+def connect():
+    try:
+        db = mysql.connector.connect(
+            host=os.getenv("MYSQL_HOST"),
+            user=os.getenv("MYSQL_USER"),
+            password=os.getenv("MYSQL_PASSWORD"),
+            database=os.getenv("MYSQL_DATABASE")
+        )
+        return db
+    except Exception as e:
+        print(e)
+        return None
 
 run()
 
