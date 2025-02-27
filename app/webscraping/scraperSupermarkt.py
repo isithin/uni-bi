@@ -5,20 +5,10 @@ from urllib.request import urlopen
 
 
 def run():
-<<<<<<< HEAD
-<<<<<<< HEAD
-    supermarkets = []
-=======
-=======
->>>>>>> bd15488970c4c8565a5d63631f7b45b69c75b039
     # Liste mit typischen Discountern (kann erweitert werden)
     discounter_keywords = [
     "Aldi", "Lidl", "Penny", "Netto", "Norma"
     ]
-<<<<<<< HEAD
->>>>>>> bd15488 (add DB-insertation to scraperSupermarkt)
-=======
->>>>>>> bd15488970c4c8565a5d63631f7b45b69c75b039
     BASE_URL = "https://berlin.kauperts.de/Adressen/Supermarkt/{letter}"
     # Durch alle Buchstaben A-Z iterieren
     for letter in string.ascii_uppercase:  # ['A', 'B', ..., 'Z']
@@ -35,44 +25,18 @@ def run():
         locationPattern = r"<td class=\"secondary zip-city\">\n(.*\n.*\n.*)<\/td>"
         locations = re.findall(locationPattern, html)
         for name, adress in zip(marketNames, locations):
-<<<<<<< HEAD
             # Adressen 'schön machen'
             adress = adress.replace("&ndash;\n", " ").replace("&nbsp;", " ").replace("\n      ", "").replace("        ", "")
-<<<<<<< HEAD
-            # Postleitzahl aus Adresse herausfiltern
-            plzPattern = r"\d\d\d\d\d"
-            plz = re.findall(plzPattern, adress)
-            # Postleitzahl aus Adresse herausfiltern
-            plzPattern = r"\d\d\d\d\d"
-            plz = re.findall(plzPattern, adress)
-            # Alle Daten in supermarkets gespeichert
-            supermarkets.append({"plz": plz,"name": name.replace("&nbsp;", ""), "adresse": adress})
-
-
-    return supermarkets
-    # Hier später einfügen in DB
-=======
-=======
-            # Adressen und Namen 'schön machen'
-            name = name.replace("&nbsp;", "")
-            adress = adress.replace("&ndash;\n", " ").replace("&nbsp;", " ").replace("\n      ", "").replace("        ", "")
->>>>>>> bd15488970c4c8565a5d63631f7b45b69c75b039
             # PLZ mit Regex extrahieren (5-stellige Zahl am Anfang der Adresse)
             plz_match = re.search(r"\b\d{5}\b", adress)
             plz = plz_match.group(0) if plz_match else "Unbekannt"
             # Ermitteln, ob Discounter
             discounter = any(discounter in name for discounter in discounter_keywords)
             # Alle Daten in Datenbank gespeichert
+            data = plz + ", " + name + ", " + discounter
             connectorTest.insert_data(connectorTest.cursor,
                                       connectorTest.db,
-                                      "INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+
-                                      plz + ", " +
-                                      name + ", " +
-                                      discounter + ")")
-<<<<<<< HEAD
->>>>>>> bd15488 (add DB-insertation to scraperSupermarkt)
-=======
->>>>>>> bd15488970c4c8565a5d63631f7b45b69c75b039
+                                      "INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
 
 
 
