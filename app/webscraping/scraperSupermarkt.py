@@ -9,7 +9,6 @@ def run():
     discounter_keywords = [
     "Aldi", "Lidl", "Penny", "Netto", "Norma"
     ]
-    supermarkets = []
     BASE_URL = "https://berlin.kauperts.de/Adressen/Supermarkt/{letter}"
     # Durch alle Buchstaben A-Z iterieren
     for letter in string.ascii_uppercase:  # ['A', 'B', ..., 'Z']
@@ -35,12 +34,10 @@ def run():
             # Ermitteln, ob Discounter
             discounter = any(discounter in name for discounter in discounter_keywords)
             # Alle Daten in Datenbank gespeichert
+            data = plz + ", " + name + ", " + discounter
             connectorTest.insert_data(connectorTest.cursor,
                                       connectorTest.db,
-                                      "INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+
-                                      plz + ", " +
-                                      name + ", " +
-                                      discounter + ")")
+                                      "INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
 
 
 
