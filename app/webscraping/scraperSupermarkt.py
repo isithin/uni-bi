@@ -3,7 +3,6 @@ import re
 import string
 
 import mysql
-from ...app import connectorTest
 from urllib.request import urlopen
 
 def run():
