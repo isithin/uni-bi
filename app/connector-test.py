@@ -113,8 +113,8 @@ def create_table(cursor):
     )
 
  
-def insert_data(cursor, db):
-    cursor.execute("INSERT INTO example (name) VALUES ('MiiiTest')")
+def insert_data(cursor, db, command):
+    cursor.execute(command)
     db.commit()
 
 def read_data(cursor):
@@ -131,7 +131,7 @@ def main():
     cursor = db.cursor()
 
     create_table(cursor)
-    insert_data(cursor, db)
+    insert_data(cursor, db, "INSERT INTO example (name) VALUES ('MiiiTest')")
     read_data(cursor) # Just for debugging
 
     cursor.close()
