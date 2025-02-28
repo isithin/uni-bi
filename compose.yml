@@ -29,7 +29,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-    command: ["python3", "connector-test.py"]
+    command: sh -c "python3 connectorTest.py && webscraping/python3 index.py"
     volumes:
       - ./app:/app
     networks:
