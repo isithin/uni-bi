@@ -19,6 +19,11 @@ jobs:
           podman login -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
           podman build -t ghcr.io/isithin/bi-scraper:demo -f Dockerfile-scraper .
           podman push ghcr.io/isithin/bi-scraper:demo
+      - name: build and push grafana image
+        run: |
+          podman login -u ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          podman build -t ghcr.io/isithin/bi-ui:demo -f Dockerfile-grafana .
+          podman push ghcr.io/isithin/bi-ui:demo        
 
   test:
     needs: build-push-image
