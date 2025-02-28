@@ -29,7 +29,10 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-    command: ["python3", "-c", "import subprocess; subprocess.run(['python3', 'connectorTest.py']);"]
+    command: >
+      bash -c "python3 connector-test.py
+      && sleep 10
+      && python3 index.py"
     volumes:
       - ./app:/app
     networks:
