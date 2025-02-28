@@ -14,7 +14,7 @@ services:
     volumes:
       - ./mysql_data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "33306:3306"
     networks:
       - bi_net
 
@@ -33,21 +33,21 @@ services:
     networks:
       - bi_net
 
-    grafana:
-      image: grafana/grafana
-      container_name: grafana_container
-      restart: always
-      depends_on:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana_container
+    restart: always
+    depends_on:
       - mysql
-      ports:
+    ports:
       - "3000:3000"
-      environment:
+    environment:
       - GF_DATABASE_TYPE=mysql
       - GF_DATABASE_HOST=mysql:3306
-      - GF_DATABASE_NAME=${MYSQL_DATABASE}
-      - GF_DATABASE_USER=${MYSQL_USER}
-      - GF_DATABASE_PASSWORD=${MYSQL_PASSWORD}
-      networks:
+      - GF_DATABASE_NAME=grafana
+      - GF_DATABASE_USER=${GF_DATABASE_USER}
+      - GF_DATABASE_PASSWORD=${GF_DATABASE_PASSWORD}
+    networks:
       - bi_net
 
 networks:
