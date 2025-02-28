@@ -29,6 +29,7 @@ def scrape(db, cursor):
         # Filtern aller Adressen auf der Seite
         locationPattern = r"<td class=\"secondary zip-city\">\n(.*\n.*\n.*)<\/td>"
         locations = re.findall(locationPattern, html)
+        i = 1
         for name, adress in zip(marketNames, locations):
             # Adressen und Namen 'schön machen'
             name = name.replace("&nbsp;", "")
@@ -39,11 +40,10 @@ def scrape(db, cursor):
             # Ermitteln, ob Discounter
             discounter = any(discounter in name for discounter in discounter_keywords)
             # Alle Daten in Datenbank gespeichert
-            data = plz + ", " + name + ", " + discounter
-            cursor.execute(connectorTest.cursor,
-                                      connectorTest.db,
-                                      "INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
+            data = i + ", " + plz + ", " + name + ", " + discounter
+            cursor.execute("INSERT INTO Supermarkt (ID, FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
             db.commit()
+            i = i + 1
         cursor.close()
         db.close()
 
