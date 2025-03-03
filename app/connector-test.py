@@ -67,10 +67,9 @@ def create_table(cursor):
             Parkplaetze          INT,
             PRIMARY KEY (ID),
             FOREIGN KEY (FK_Postleitzahl) REFERENCES Postleitgebiet(Postleitzahl)
-              ON UPDATE CASCADE
               ON DELETE CASCADE
         );
-        """
+        """ # ON UPDATE CASCADE
     )
     cursor.execute(
         """
