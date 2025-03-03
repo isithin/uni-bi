@@ -1,3 +1,4 @@
 #app/webscraping/data/*
 .env
 mysql_data/*
+app/webscraping/_pycache_/*

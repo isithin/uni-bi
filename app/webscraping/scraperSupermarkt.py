@@ -2,12 +2,13 @@ import os
 import re
 import string
 
-import mysql
+import mysql.connector
 from urllib.request import urlopen
 
 def run():
     db=connect()
-    scrape(db, db.cursor())
+    cursor = db.cursor()
+    scrape(db, cursor)
 
 def scrape(db, cursor):
     # Liste mit typischen Discountern (kann erweitert werden)
