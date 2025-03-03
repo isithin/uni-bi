@@ -32,7 +32,7 @@ def scrape(db, cursor):
         locations = re.findall(locationPattern, html)
         for name, adress in zip(marketNames, locations):
             # Adressen und Namen 'schön machen'
-            name = name.replace("&nbsp;", "")
+            name = name.replace("&nbsp;", "").replace("&amp;", "&")
             adress = adress.replace("&ndash;\n", " ").replace("&nbsp;", " ").replace("\n      ", "").replace("        ", "")
             # PLZ mit Regex extrahieren (5-stellige Zahl am Anfang der Adresse)
             plz_match = re.search(r"\b\d{5}\b", adress)
