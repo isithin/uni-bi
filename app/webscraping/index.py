@@ -1,4 +1,6 @@
 import scraperImmowelt
+import scraperBezirk
+import scraperPostleitgebiet
 import scraperWohnungsboerse
 import scraperSupermarkt
 
@@ -10,17 +12,28 @@ if __name__ == "__main__":
     # scraperImmowelt.run()
     # print("")
 
+    # Bezirk scraper starten
+    print("📡 Scraping Bezirke...")
+    scraperBezirk.run()
+    print("")
+
+    # Postleitgebiet scraper starten
+    print("📡 Scraping Wohnungsboerse...")
+    scraperPostleitgebiet.run()
+    print("")
+
+    # Supermarkt scraper starten
+    print("📡 Scraping Supermärkte...")
+    scraperSupermarkt.run()
+    print("")
+
     # Wohnungsboerse scraper starten
     print("📡 Scraping Wohnungsboerse...")
     scraperWohnungsboerse.run()
     print("")
 
-    # Supermarkt scraper starten
-    print("📡 Scraping Wohnungsboerse...")
-    scraperSupermarkt.run()
-    print("")
 
 
     # Ergebnisse anzeigen
     print("✅ All scrapers have finished.")
-    print("💾 The data has been saved to the data folder.")
+    print("💾 The data has been saved to the data folder/DB.")
