@@ -22,6 +22,7 @@ def connect():
 def create_table(cursor):
     #TODO: create grafana database with root!!!
     #TODO: add user bi, grafana!!!
+    #TODO: create database bi
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS example (

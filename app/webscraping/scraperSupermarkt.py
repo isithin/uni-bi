@@ -41,7 +41,7 @@ def scrape(db, cursor):
             discounter = any(discounter in name for discounter in discounter_keywords)
             # Alle Daten in Datenbank gespeichert
             data = plz + ", " + name + ", " + discounter
-            cursor.execute("INSERT INTO Supermarkt (ID, FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
+            cursor.execute("INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
             db.commit()
         cursor.close()
         db.close()
