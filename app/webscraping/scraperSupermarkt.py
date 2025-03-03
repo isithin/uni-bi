@@ -38,7 +38,8 @@ def scrape(db, cursor):
             plz_match = re.search(r"\b\d{5}\b", adress)
             plz = plz_match.group(0) if plz_match else "Unbekannt"
             # Ermitteln, ob Discounter
-            discounter = any(discounter in name for discounter in discounter_keywords)
+            discounter = 0
+            if(any(discounter in name for discounter in discounter_keywords)): discounter = 1
             # Alle Daten in Datenbank gespeichert
             data = plz + ", " + name + ", " + str(discounter)
             cursor.execute("INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
