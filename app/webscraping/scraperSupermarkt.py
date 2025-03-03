@@ -2,12 +2,13 @@ import os
 import re
 import string
 
-import mysql
+import mysql.connector
 from urllib.request import urlopen
 
 def run():
     db=connect()
-    scrape(db, db.cursor())
+    cursor = db.cursor()
+    scrape(db, cursor)
 
 def scrape(db, cursor):
     # Liste mit typischen Discountern (kann erweitert werden)
@@ -29,21 +30,20 @@ def scrape(db, cursor):
         # Filtern aller Adressen auf der Seite
         locationPattern = r"<td class=\"secondary zip-city\">\n(.*\n.*\n.*)<\/td>"
         locations = re.findall(locationPattern, html)
-        i = 1
         for name, adress in zip(marketNames, locations):
             # Adressen und Namen 'schön machen'
-            name = name.replace("&nbsp;", "")
+            name = "'"+name.replace("&nbsp;", "").replace("&amp;", "&")+"'"
             adress = adress.replace("&ndash;\n", " ").replace("&nbsp;", " ").replace("\n      ", "").replace("        ", "")
             # PLZ mit Regex extrahieren (5-stellige Zahl am Anfang der Adresse)
             plz_match = re.search(r"\b\d{5}\b", adress)
             plz = plz_match.group(0) if plz_match else "Unbekannt"
             # Ermitteln, ob Discounter
-            discounter = any(discounter in name for discounter in discounter_keywords)
+            discounter = 0
+            if(any(discounter in name for discounter in discounter_keywords)): discounter = 1
             # Alle Daten in Datenbank gespeichert
-            data = i + ", " + plz + ", " + name + ", " + discounter
-            cursor.execute("INSERT INTO Supermarkt (ID, FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
+            data = plz + ", " + name + ", " + str(discounter)
+            cursor.execute("INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
             db.commit()
-            i = i + 1
         cursor.close()
         db.close()
 

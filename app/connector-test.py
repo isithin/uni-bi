@@ -22,6 +22,7 @@ def connect():
 def create_table(cursor):
     #TODO: create grafana database with root!!!
     #TODO: add user bi, grafana!!!
+    #TODO: create database bi
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS example (
@@ -59,22 +60,21 @@ def create_table(cursor):
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS Immobilie (
-            ID                   INT NOT NULL,
+            ID                   INT NOT NULL AUTO_INCREMENT,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
             Preis_warm           DECIMAL(10,2),
             Groesse              INT,
             Parkplaetze          INT,
             PRIMARY KEY (ID),
             FOREIGN KEY (FK_Postleitzahl) REFERENCES Postleitgebiet(Postleitzahl)
-              ON UPDATE CASCADE
               ON DELETE CASCADE
         );
-        """
+        """ # ON UPDATE CASCADE
     )
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS Supermarkt (
-            ID                   INT NOT NULL,
+            ID                   INT NOT NULL AUTO_INCREMENT,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
             Name                 VARCHAR(100),
             Discounter           BOOLEAN,          
@@ -88,7 +88,7 @@ def create_table(cursor):
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS Haltestelle (
-            ID                   INT NOT NULL,
+            ID                   INT NOT NULL AUTO_INCREMENT,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
             Transportmittel      VARCHAR(50),
             PRIMARY KEY (ID),
@@ -101,7 +101,7 @@ def create_table(cursor):
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS Freizeitangebot (
-            ID                   INT NOT NULL,
+            ID                   INT NOT NULL AUTO_INCREMENT,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
             Art                  VARCHAR(50),
             PRIMARY KEY (ID),
