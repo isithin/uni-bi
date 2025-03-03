@@ -1,10 +1,16 @@
 import re
+import os
 import string
 from urllib.request import urlopen
+import mysql.connector
 import html
 
-
 def run():
+    db=connect()
+    cursor = db.cursor()
+    scrape(db, cursor)
+
+def scrape(db, cursor):
     url = "https://www.in-berlin-brandenburg.com/Berliner_Bezirke/plz-berlin.html"
     page = urlopen(url)
     html_bytes = page.read()
@@ -35,12 +41,25 @@ def run():
         elif plz_match and ortsteil and bezirk:
             for plz in plz_match:
                 plz_data.append({"PLZ": plz, "Ortsteil": ortsteil, "Bezirk": bezirk})
-    
+                data = plz + ", " + "'"+bezirk+"'"
+                cursor.execute("INSERT INTO Postleitgebiet (Postleitzahl, FK_Bezirksname) VALUES ("+data+")")
+                db.commit()
 
+    cursor.close()
+    db.close()
 
-    return plz_data
-    # Hier später einfügen in DB
+# Verbindung zu MySQL herstellen
+def connect():
+    try:
+        db = mysql.connector.connect(
+            host=os.getenv("MYSQL_HOST"),
+            user=os.getenv("MYSQL_USER"),
+            password=os.getenv("MYSQL_PASSWORD"),
+            database=os.getenv("MYSQL_DATABASE")
+        )
+        return db
+    except Exception as e:
+        print(e)
+        return None    
 
-    
-
-print(run())
+run()
