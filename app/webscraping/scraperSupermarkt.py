@@ -36,7 +36,7 @@ def scrape(db, cursor):
             adress = adress.replace("&ndash;\n", " ").replace("&nbsp;", " ").replace("\n      ", "").replace("        ", "")
             # PLZ mit Regex extrahieren (5-stellige Zahl am Anfang der Adresse)
             plz_match = re.search(r"\b\d{5}\b", adress)
-            plz = plz_match.group(0) if plz_match else "Unbekannt"
+            plz = plz_match.group(0) if plz_match else "'Unbekannt'"
             # Ermitteln, ob Discounter
             discounter = 0
             if(any(discounter in name.lower() for discounter in discounter_keywords)): discounter = 1
