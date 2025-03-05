@@ -5,6 +5,7 @@ services:
   mysql:
     image: mysql
     container_name: mysql_container
+    hostname: mysql_container
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -45,7 +46,7 @@ services:
     depends_on:
       - mysql
     ports:
-      - "3000:3000"
+      - "33000:3000"
     environment:
       - GF_DATABASE_TYPE=mysql
       - GF_DATABASE_HOST=mysql:3306
