@@ -13,7 +13,7 @@ def run():
 def scrape(db, cursor):
     # Liste mit typischen Discountern (kann erweitert werden)
     discounter_keywords = [
-    "Aldi", "Lidl", "Penny", "Netto", "Norma"
+    "aldi", "lidl", "penny", "netto", "norma"
     ]
     BASE_URL = "https://berlin.kauperts.de/Adressen/Supermarkt/{letter}"
     # Durch alle Buchstaben A-Z iterieren
@@ -39,7 +39,7 @@ def scrape(db, cursor):
             plz = plz_match.group(0) if plz_match else "Unbekannt"
             # Ermitteln, ob Discounter
             discounter = 0
-            if(any(discounter in name for discounter in discounter_keywords)): discounter = 1
+            if(any(discounter in name.upper() for discounter in discounter_keywords)): discounter = 1
             # Alle Daten in Datenbank gespeichert
             data = plz + ", " + name + ", " + str(discounter)
             cursor.execute("INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
