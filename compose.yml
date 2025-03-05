@@ -29,7 +29,9 @@ services:
       MYSQL_HOST: mysql
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+      GF_DATABASE_PASSWORD: ${GF_DATABASE_PASSWORD}
     command: >
       bash -c "python3 db_init.py
       && sleep 10

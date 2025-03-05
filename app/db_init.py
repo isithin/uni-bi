@@ -32,8 +32,8 @@ def create_table(cursor):
     )
 
     # User anlegen
-    grafana_user = "CREATE USER 'grafanaReader'IF NOT EXISTS IDENTIFIED BY '%s'" % os.getenv("GF_DATABASE_PASSWORD")
-    bi_user = "CREATE USER 'bi'IF NOT EXISTS IDENTIFIED BY '%s'" % os.getenv("MYSQL_PASSWORD")
+    grafana_user = "CREATE USER 'grafanaReader' IF NOT EXISTS IDENTIFIED BY '%s'" % os.getenv("GF_DATABASE_PASSWORD")
+    bi_user = "CREATE USER 'bi' IF NOT EXISTS IDENTIFIED BY '%s'" % os.getenv("MYSQL_PASSWORD")
     
     cursor.execute(grafana_user)
     cursor.execute(bi_user)
