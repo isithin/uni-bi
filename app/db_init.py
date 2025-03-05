@@ -20,9 +20,36 @@ def connect():
         return None
 
 def create_table(cursor):
-    #TODO: create grafana database with root!!!
-    #TODO: add user bi, grafana!!!
-    #TODO: create database bi
+    cursor.execute(
+        """
+        CREATE DATABASE IF NOT EXISTS grafana
+        """
+    )
+    cursor.execute(
+        """
+        CREATE DATABASE IF NOT EXISTS bi
+        """
+    )
+
+    # User anlegen
+    grafana_user = "CREATE USER 'grafanaReader'IF NOT EXISTS IDENTIFIED BY '%s'" % os.getenv("GF_DATABASE_PASSWORD")
+    bi_user = "CREATE USER 'bi'IF NOT EXISTS IDENTIFIED BY '%s'" % os.getenv("MYSQL_PASSWORD")
+    
+    cursor.execute(grafana_user)
+    cursor.execute(bi_user)
+    
+    # Rechte vergeben
+    cursor.execute(
+        """
+        GRANT SELECT ON bi.* TO 'grafanaReader'
+        """
+        )
+    cursor.execute(
+        """
+        GRANT ALL PRIVILEGES ON grafana.* TO 'grafanaReader'
+        """
+        )
+    # Test
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS example (
@@ -31,6 +58,7 @@ def create_table(cursor):
         )
         """
     )
+    # Real Tables
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS Bezirk (
