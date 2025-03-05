@@ -33,7 +33,7 @@ def scrape(db, cursor):
         if bezirk_match:
             bezirk = html.unescape(bezirk_match.group(1).strip())
             data = "'"+bezirk+"',"
-            cursor.execute("INSERT INTO Bezirk (Name) VALUES ("+data+") ON DUPLICATE KEY UPDATE Name = VALUE(Name)")
+            cursor.execute("INSERT IGNORE INTO Bezirk (Name) VALUES ("+data+")")
             db.commit()
 
     cursor.close()

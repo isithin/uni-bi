@@ -42,7 +42,7 @@ def scrape(db, cursor):
             for plz in plz_match:
                 plz_data.append({"PLZ": plz, "Ortsteil": ortsteil, "Bezirk": bezirk})
                 data = plz + ", " + "'"+bezirk+"'"
-                cursor.execute("INSERT INTO Postleitgebiet (Postleitzahl, FK_Bezirksname) VALUES ("+data+") ON DUPLICATE KEY UPDATE FK_Bezirksname = VALUE(FK_Bezirksname)")
+                cursor.execute("INSERT IGNORE INTO Postleitgebiet (Postleitzahl, FK_Bezirksname) VALUES ("+data+")")
                 db.commit()
 
     cursor.close()
