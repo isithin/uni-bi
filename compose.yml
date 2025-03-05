@@ -31,9 +31,9 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     command: >
-      bash -c "python3 connector-test.py
+      bash -c "python3 db_init.py
       && sleep 10
-      && python3 /app/webscraping/index.py"
+      && python3 /app/webscraping/start_scrapers.py"
     volumes:
       - ./app:/app
     networks:
