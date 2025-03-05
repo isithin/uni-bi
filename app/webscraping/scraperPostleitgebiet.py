@@ -41,7 +41,7 @@ def scrape(db, cursor):
         elif plz_match and ortsteil and bezirk:
             for plz in plz_match:
                 plz_data.append({"PLZ": plz, "Ortsteil": ortsteil, "Bezirk": bezirk})
-                data = plz + ", " + "'"+bezirk+"'"
+                data = plz + ", " + "'"+bezirk.replace("Die Postleitzahlen ", "")+"'"
                 cursor.execute("INSERT IGNORE INTO Postleitgebiet (Postleitzahl, FK_Bezirksname) VALUES ("+data+")")
                 db.commit()
 

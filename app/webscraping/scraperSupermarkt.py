@@ -39,13 +39,13 @@ def scrape(db, cursor):
             plz = plz_match.group(0) if plz_match else "Unbekannt"
             # Ermitteln, ob Discounter
             discounter = 0
-            if(any(discounter in name.upper() for discounter in discounter_keywords)): discounter = 1
+            if(any(discounter in name.lower() for discounter in discounter_keywords)): discounter = 1
             # Alle Daten in Datenbank gespeichert
             data = plz + ", " + name + ", " + str(discounter)
             cursor.execute("INSERT IGNORE INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
             db.commit()
-        cursor.close()
-        db.close()
+    cursor.close()
+    db.close()
 
 # Verbindung zu MySQL herstellen
 def connect():
