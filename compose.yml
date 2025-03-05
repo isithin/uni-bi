@@ -15,7 +15,7 @@ services:
     volumes:
       - ./mysql_data:/var/lib/mysql
     ports:
-      - "33307:3306"
+      - "33306:3306"
     networks:
       - bi_net
 
@@ -41,7 +41,7 @@ services:
     depends_on:
       - mysql
     ports:
-      - "3001:3000"
+      - "33000:3000"
     environment:
       - GF_DATABASE_TYPE=mysql
       - GF_DATABASE_HOST=mysql:3306
