@@ -32,7 +32,7 @@ services:
     command: >
       bash -c "python3 connector-test.py
       && sleep 10
-      && python3 index.py"
+      && python3 /app/webscraping/index.py"
     volumes:
       - ./app:/app
     networks:
