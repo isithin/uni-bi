@@ -42,7 +42,7 @@ def scrape(db, cursor):
             if(any(discounter in name.upper() for discounter in discounter_keywords)): discounter = 1
             # Alle Daten in Datenbank gespeichert
             data = plz + ", " + name + ", " + str(discounter)
-            cursor.execute("INSERT INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
+            cursor.execute("INSERT IGNORE INTO Supermarkt (FK_Postleitzahl, Name, Discounter) VALUES ("+data+")")
             db.commit()
         cursor.close()
         db.close()
