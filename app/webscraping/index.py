@@ -27,10 +27,10 @@ if __name__ == "__main__":
     scraperSupermarkt.run()
     print("")
 
-    # Wohnungsboerse scraper starten
-    print("📡 Scraping Wohnungsboerse...")
-    scraperWohnungsboerse.run()
-    print("")
+    # # Wohnungsboerse scraper starten
+    # print("📡 Scraping Wohnungsboerse...")
+    # scraperWohnungsboerse.run()
+    # print("")
 
 
 
