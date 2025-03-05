@@ -10,9 +10,8 @@ def connect():
     try:
         db = mysql.connector.connect(
             host=os.getenv("MYSQL_HOST"),
-            user=os.getenv("MYSQL_USER"),
-            password=os.getenv("MYSQL_PASSWORD"),
-            database=os.getenv("MYSQL_DATABASE")
+            user="root",
+            password=os.getenv("MYSQL_ROOT_PASSWORD"),
         )
         return db
     except Exception as e:
