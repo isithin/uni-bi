@@ -36,4 +36,4 @@ if __name__ == "__main__":
 
     # Ergebnisse anzeigen
     print("✅ All scrapers have finished.")
-    print("💾 The data has been saved to the data folder/DB.")
+    print("💾 The data has been saved to DB")
