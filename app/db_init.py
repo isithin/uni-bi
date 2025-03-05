@@ -12,7 +12,7 @@ def connect():
             host=os.getenv("MYSQL_HOST"),
             user="root",
             password=os.getenv("MYSQL_ROOT_PASSWORD"),
-            database=os.getenv("MYSQL_DATABASE")
+            database="mysql")
         )
         return db
     except Exception as e:
