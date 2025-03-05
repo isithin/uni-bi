@@ -15,7 +15,7 @@ services:
     volumes:
       - ./mysql_data:/var/lib/mysql
     ports:
-      - "33306:3306"
+      - "33308:3306"
     networks:
       - bi_net
 
@@ -33,7 +33,7 @@ services:
     command: >
       bash -c "python3 db_init.py
       && sleep 10
-      && python3 /app/webscraping/start_scrapers.py"
+      && python3 /app/webscraping/run_scrapers.py"
     volumes:
       - ./app:/app
     networks:
