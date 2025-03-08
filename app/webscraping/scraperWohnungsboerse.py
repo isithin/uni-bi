@@ -66,7 +66,6 @@ def scrape(db, cursor):
                     # Datenstruktur für die Immobilie initialisieren
                     estate_data = {
                         "Title": "",
-                        "PLZ": "",
                         "Warm Price": "",
                         "Cold Price": "",
                         "Utilities Cost": "",
@@ -75,6 +74,7 @@ def scrape(db, cursor):
                         "Number of Rooms": "",
                         "Level": "",
                         "Location": "",
+                        "PLZ": "",
                         "Amenities": "",
                         "Env": "",
                         "Year of Construction": "",
@@ -101,18 +101,6 @@ def scrape(db, cursor):
                     if title_match:
                         try:
                             estate_data["Title"] = title_match.group(1).strip()
-                        except:
-                            pass
-
-                    # PLZ extrahieren
-                    plz_match = re.search(
-                        r'<div class="pl-4 md:pl-5 w-52">.*<br>.*(\d{5}).*</div>',
-                        estate,
-                    )
-                    # PLZ in Datenstruktur speichern
-                    if plz_match:
-                        try:
-                            estate_data["PLZ"] = plz_match.group(1).strip()
                         except:
                             pass
 
@@ -151,6 +139,15 @@ def scrape(db, cursor):
                             city_match = re.sub(r"\s+", " ", city_match)
                             city_match = city_match.split("<br />")
                             estate_data["Location"] = city_match[1]
+                        except:
+                            pass
+                        
+                    # PLZ extrahieren
+                    plz_match = re.search(r"\b\d{5}\b", estate_data["Location"])
+                    # PLZ in Datenstruktur speichern
+                    if plz_match:
+                        try:
+                            estate_data["PLZ"] = plz_match.group(0).strip()
                         except:
                             pass
 
