@@ -10,6 +10,7 @@ def run():
     scrape(db, cursor)
 
 def scrape(db, cursor):
+        i=0
     
         # Basis-URL für die Suche nach Mietwohnungen in Berlin
         base_url = "https://www.wohnungsboerse.net/searches/index?estate_marketing_types=miete%2C1&marketing_type=miete&estate_types%5B0%5D=1&is_rendite=0&cities%5B0%5D=Berlin&term=Berlin&page={}"
@@ -296,11 +297,12 @@ def scrape(db, cursor):
                     # Alle Daten in Datenbank schreiben
                     
                     # SQL-Befehl mit Platzhaltern
-                    insert = """
-                            INSERT IGNORE INTO Immobilie (FK_Postleitzahl, Preis_warm, Groesse) 
-                            VALUES (%s, %s, %s)
-                        """
+                    insert = "INSERT IGNORE INTO Immobilie (FK_Postleitzahl, Preis_warm, Groesse) VALUES (%s, %s, %s)"
 
+                    if (i<5):
+                        print(estate_data)
+                        print(estate_data["PLZ"])
+                        i=i+1
                     # Befehl ausführen
                     cursor.execute(insert, (estate_data["PLZ"], estate_data["Warm Price"], estate_data["Room Size (m²)"]))
                     db.commit()
