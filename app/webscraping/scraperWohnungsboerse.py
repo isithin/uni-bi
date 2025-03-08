@@ -1,43 +1,16 @@
 import re
 import csv
 from urllib.request import urlopen
-
+import os
+import mysql.connector
 
 def run():
-    # CSV file öffnen im Schreibmodus und ein CSV-Schreibobjekt mit Semikolon-Trennzeichen erstellen
-    with open(
-        "data/data-wohnungsboerse.csv", "w", newline="", encoding="utf-8-sig"
-    ) as csvfile:
-        fieldnames = [
-            "Title",
-            "Warm Price",
-            "Cold Price",
-            "Utilities Cost",
-            "Deposit",
-            "Room Size (m²)",
-            "Number of Rooms",
-            "Level",
-            "Location",
-            "Amenities",
-            "Env",
-            "Year of Construction",
-            "Elevator",
-            "Parking",
-            "Kitchen",
-            "Balcony",
-            "Garden",
-            "Terrace",
-            "Move-in Date",
-            "Efficiency Class",
-            "Energy Source",
-            "Energy Demand",
-            "Link",
-        ]
-        # CSV-Header schreiben
-        writer = csv.DictWriter(
-            csvfile, fieldnames=fieldnames, delimiter=";", quotechar='"'
-        )
-        writer.writeheader()
+    db=connect()
+    cursor = db.cursor()
+    scrape(db, cursor)
+
+def scrape(db, cursor):
+    
         # Basis-URL für die Suche nach Mietwohnungen in Berlin
         base_url = "https://www.wohnungsboerse.net/searches/index?estate_marketing_types=miete%2C1&marketing_type=miete&estate_types%5B0%5D=1&is_rendite=0&cities%5B0%5D=Berlin&term=Berlin&page={}"
 
@@ -92,6 +65,7 @@ def run():
                     # Datenstruktur für die Immobilie initialisieren
                     estate_data = {
                         "Title": "",
+                        "PLZ": "",
                         "Warm Price": "",
                         "Cold Price": "",
                         "Utilities Cost": "",
@@ -126,6 +100,18 @@ def run():
                     if title_match:
                         try:
                             estate_data["Title"] = title_match.group(1).strip()
+                        except:
+                            pass
+
+                    # PLZ extrahieren
+                    plz_match = re.search(
+                        r'<div class="pl-4 md:pl-5 w-52">.*<br>.*(\d{5}).*</div>',
+                        estate,
+                    )
+                    # PLZ in Datenstruktur speichern
+                    if plz_match:
+                        try:
+                            estate_data["PLZ"] = plz_match.group(1).strip()
                         except:
                             pass
 
@@ -307,6 +293,31 @@ def run():
                         except:
                             pass
 
-                    # Alle Daten in CSV-Datei schreiben
-                    writer.writerow(estate_data)
+                    # Alle Daten in Datenbank schreiben
+                    
+                    # SQL-Befehl mit Platzhaltern
+                    insert = """
+                            INSERT IGNORE INTO Immobilie (FK_Postleitzahl, Preis_warm, Groesse) 
+                            VALUES (%s, %s, %s)
+                        """
+
+                    # Befehl ausführen
+                    cursor.execute(insert, (estate_data["PLZ"], estate_data["Warm Price"], estate_data["Room Size (m²)"]))
+                    db.commit()
                     print("✅")
+
+# Verbindung zu MySQL herstellen
+def connect():
+    try:
+        db = mysql.connector.connect(
+            host=os.getenv("MYSQL_HOST"),
+            user=os.getenv("MYSQL_USER"),
+            password=os.getenv("MYSQL_PASSWORD"),
+            database=os.getenv("MYSQL_DATABASE")
+        )
+        return db
+    except Exception as e:
+        print(e)
+        return None    
+
+run()
