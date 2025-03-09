@@ -2,3 +2,4 @@
 .env
 mysql_data/*
 app/webscraping/__pycache__/*
+webscraping/__pycache__/*
