@@ -71,7 +71,7 @@ def scrape(db, cursor):
                         "Deposit": "",
                         "Room Size (m²)": "",
                         "Number of Rooms": "",
-                        "Level": "",
+                        "Level": "0",
                         "Location": "",
                         "PLZ": "",
                         "Amenities": "",
