@@ -15,7 +15,7 @@ def scrape(db, cursor):
         base_url = "https://www.wohnungsboerse.net/searches/index?estate_marketing_types=miete%2C1&marketing_type=miete&estate_types%5B0%5D=1&is_rendite=0&cities%5B0%5D=Berlin&term=Berlin&page={}"
 
         # Durch die ersten 50 Seiten der Suchergebnisse iterieren
-        for page_number in range(1, 2):
+        for page_number in range(1, 50):
             # URL für die aktuelle Seite erstellen
             url = base_url.format(page_number)
             print("")
@@ -42,13 +42,12 @@ def scrape(db, cursor):
             # Durch jede Immobilien-Seite iterieren
             for estate_link in estate_links:
                 estate_url = estate_link
-                print("Scraping estate:", estate_url, end=" ")
 
                 # HTML-Seite der Immobilie herunterladen und dekodieren
                 try:
                     estate_page = urlopen(estate_url)
                 except:
-                    print("❌")
+                    print(estate_url+" konnt nicht aufgerufen werden")
                     continue
                 estate_html_bytes = estate_page.read()
                 estate_html = estate_html_bytes.decode("utf-8")
@@ -320,7 +319,6 @@ def scrape(db, cursor):
                     # Befehl ausführen
                     cursor.execute(insert, insert_data)
                     db.commit()
-                    print("✅")
 
 # Verbindung zu MySQL herstellen
 def connect():
