@@ -166,7 +166,7 @@ def scrape(db, cursor):
                                 re.DOTALL,
                             )
                             cold_price = re.sub(r"\.", "", cold_price.group(1))
-                            estate_data["Cold Price"] = cold_price
+                            estate_data["Cold Price"] = cold_price.replace(",", ".")
 
                             warm_price = re.search(
                                 r'Gesamtmiete:</td> <td class="font-bold text-green-emphasis"> (.*?)&nbsp;',
@@ -175,7 +175,7 @@ def scrape(db, cursor):
                             )
                             warm_price = re.sub(r"\.", "", warm_price.group(1))
                             if "kA" in warm_price: warm_price= "k.A."
-                            estate_data["Warm Price"] = warm_price
+                            estate_data["Warm Price"] = warm_price.replace(",", ".")
 
                             utilities_cost = re.search(
                                 r"Nebenkosten: </td> <td> (.*?)&nbsp;",
