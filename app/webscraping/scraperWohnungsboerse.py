@@ -78,12 +78,12 @@ def scrape(db, cursor):
                         "Env": "",
                         "Year of Construction": "",
                         "Move-in Date": "",
-                        "Elevator": "Nicht verfügbar",
-                        "Parking": "Nicht verfügbar",
-                        "Kitchen": "Nicht verfügbar",
-                        "Balcony": "Nicht verfügbar",
-                        "Garden": "Nicht verfügbar",
-                        "Terrace": "Nicht verfügbar",
+                        "Elevator": False,
+                        "Parking": False,
+                        "Kitchen": False,
+                        "Balcony": False,
+                        "Garden": False,
+                        "Terrace": False,
                         "Efficiency Class": "",
                         "Energy Source": "",
                         "Energy Demand": "",
@@ -243,18 +243,18 @@ def scrape(db, cursor):
                             amenities = []
                             for match in key_amenities:
                                 if "balkon" in match.lower():
-                                    estate_data["Balcony"] = "Verfügbar"
+                                    estate_data["Balcony"] = True
                                 elif "garten" in match.lower():
-                                    estate_data["Garden"] = "Verfügbar"
+                                    estate_data["Garden"] = True
                                 elif "terrasse" in match.lower():
-                                    estate_data["Terrace"] = "Verfügbar"
+                                    estate_data["Terrace"] = True
                                 elif "aufzug" in match.lower():
-                                    estate_data["Elevator"] = "Verfügbar"
+                                    estate_data["Elevator"] = True
                                 elif (
                                     "einbauküche" in match.lower()
                                     or "ebk" in match.lower()
                                 ):
-                                    estate_data["Kitchen"] = "Verfügbar"
+                                    estate_data["Kitchen"] = True
                                 else:
                                     amenities.append(match.strip())
 
