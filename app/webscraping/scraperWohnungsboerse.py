@@ -290,13 +290,35 @@ def scrape(db, cursor):
                         except:
                             pass
 
-                    # Alle Daten in Datenbank schreiben
+                    # Alle relevanten Daten zusammenfassen
+                    insert_data = (
+                        estate_data["PLZ"],                  # FK_Postleitzahl
+                        estate_data["Warm Price"],           # Preis_warm
+                        estate_data["Cold Price"],           # Preis_kalt
+                        estate_data["Room Size (m²)"],       # Groesse in qm
+                        estate_data["Number of Rooms"],      # Anzahl_Räume
+                        estate_data["Level"],                # Etage
+                        estate_data["Year of Construction"], # Baujahr
+                        estate_data["Elevator"],             # Aufzug (1 = Ja, 0 = Nein)
+                        estate_data["Parking"],              # Parkplaetze
+                        estate_data["Kitchen"],              # Kueche
+                        estate_data["Balcony"],              # Balkon
+                        estate_data["Garden"],               # Garten
+                        estate_data["Terrace"],              # Terrasse
+                        estate_data["Energy Source"]         # Energie
+)
                     
                     # SQL-Befehl mit Platzhaltern
-                    insert = "INSERT IGNORE INTO Immobilie (FK_Postleitzahl, Preis_warm, Groesse) VALUES (%s, %s, %s)"
+                    insert = """
+                            INSERT INTO Immobilie (
+                                FK_Postleitzahl, Preis_warm, Preis_kalt, Groesse, Anzahl_Räume, 
+                                Etage, Baujahr, Aufzug, Parkplaetze, Kueche, Balkon, Garten, Terrasse, Energie
+                            ) 
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """
 
                     # Befehl ausführen
-                    cursor.execute(insert, (estate_data["PLZ"], estate_data["Warm Price"], estate_data["Room Size (m²)"]))
+                    cursor.execute(insert, insert_data)
                     db.commit()
                     print("✅")
 
