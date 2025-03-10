@@ -47,7 +47,7 @@ def scrape(db, cursor):
                 try:
                     estate_page = urlopen(estate_url)
                 except:
-                    print(estate_url+" konnt nicht aufgerufen werden")
+                    print(estate_url+" konnte nicht aufgerufen werden")
                     continue
                 estate_html_bytes = estate_page.read()
                 estate_html = estate_html_bytes.decode("utf-8")
