@@ -82,6 +82,7 @@ def create_table(cursor):
         """
         CREATE TABLE IF NOT EXISTS Postleitgebiet (
             Postleitzahl         VARCHAR(10) NOT NULL,
+            Ortsteil             VARCHAR(50),
             FK_Bezirksname       VARCHAR(50) NOT NULL,
             PRIMARY KEY (Postleitzahl),
             FOREIGN KEY (FK_Bezirksname) REFERENCES Bezirk(Name)
@@ -96,8 +97,18 @@ def create_table(cursor):
             ID                   INT NOT NULL AUTO_INCREMENT,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
             Preis_warm           DECIMAL(10,2),
+            Preis_kalt           DECIMAL(10,2),
             Groesse              INT,
-            Parkplaetze          INT,
+            Anzahl_Räume         INT,
+            Etage                INT,
+            Baujahr              INT,
+            Aufzug               BOOLEAN,
+            Parkplaetze          BOOLEAN,
+            Kueche               BOOLEAN,
+            Balkon               BOOLEAN,
+            Garten               BOOLEAN,
+            Terrasse             BOOLEAN,
+            Energie              VARCHAR(20),
             PRIMARY KEY (ID),
             FOREIGN KEY (FK_Postleitzahl) REFERENCES Postleitgebiet(Postleitzahl)
               ON UPDATE CASCADE

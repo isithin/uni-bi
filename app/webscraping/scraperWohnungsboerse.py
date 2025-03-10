@@ -1,48 +1,21 @@
 import re
 import csv
 from urllib.request import urlopen
-
+import os
+import mysql.connector
 
 def run():
-    # CSV file öffnen im Schreibmodus und ein CSV-Schreibobjekt mit Semikolon-Trennzeichen erstellen
-    with open(
-        "data/data-wohnungsboerse.csv", "w", newline="", encoding="utf-8-sig"
-    ) as csvfile:
-        fieldnames = [
-            "Title",
-            "Warm Price",
-            "Cold Price",
-            "Utilities Cost",
-            "Deposit",
-            "Room Size (m²)",
-            "Number of Rooms",
-            "Level",
-            "Location",
-            "Amenities",
-            "Env",
-            "Year of Construction",
-            "Elevator",
-            "Parking",
-            "Kitchen",
-            "Balcony",
-            "Garden",
-            "Terrace",
-            "Move-in Date",
-            "Efficiency Class",
-            "Energy Source",
-            "Energy Demand",
-            "Link",
-        ]
-        # CSV-Header schreiben
-        writer = csv.DictWriter(
-            csvfile, fieldnames=fieldnames, delimiter=";", quotechar='"'
-        )
-        writer.writeheader()
+    db=connect()
+    cursor = db.cursor()
+    scrape(db, cursor)
+
+def scrape(db, cursor):
+    
         # Basis-URL für die Suche nach Mietwohnungen in Berlin
         base_url = "https://www.wohnungsboerse.net/searches/index?estate_marketing_types=miete%2C1&marketing_type=miete&estate_types%5B0%5D=1&is_rendite=0&cities%5B0%5D=Berlin&term=Berlin&page={}"
 
         # Durch die ersten 50 Seiten der Suchergebnisse iterieren
-        for page_number in range(1, 2):
+        for page_number in range(1, 5):
             # URL für die aktuelle Seite erstellen
             url = base_url.format(page_number)
             print("")
@@ -69,13 +42,12 @@ def run():
             # Durch jede Immobilien-Seite iterieren
             for estate_link in estate_links:
                 estate_url = estate_link
-                print("Scraping estate:", estate_url, end=" ")
 
                 # HTML-Seite der Immobilie herunterladen und dekodieren
                 try:
                     estate_page = urlopen(estate_url)
                 except:
-                    print("❌")
+                    print(estate_url+" konnte nicht aufgerufen werden")
                     continue
                 estate_html_bytes = estate_page.read()
                 estate_html = estate_html_bytes.decode("utf-8")
@@ -98,18 +70,19 @@ def run():
                         "Deposit": "",
                         "Room Size (m²)": "",
                         "Number of Rooms": "",
-                        "Level": "",
+                        "Level": "0",
                         "Location": "",
+                        "PLZ": "",
                         "Amenities": "",
                         "Env": "",
                         "Year of Construction": "",
                         "Move-in Date": "",
-                        "Elevator": "Nicht verfügbar",
-                        "Parking": "Nicht verfügbar",
-                        "Kitchen": "Nicht verfügbar",
-                        "Balcony": "Nicht verfügbar",
-                        "Garden": "Nicht verfügbar",
-                        "Terrace": "Nicht verfügbar",
+                        "Elevator": False,
+                        "Parking": False,
+                        "Kitchen": False,
+                        "Balcony": False,
+                        "Garden": False,
+                        "Terrace": False,
                         "Efficiency Class": "",
                         "Energy Source": "",
                         "Energy Demand": "",
@@ -166,6 +139,15 @@ def run():
                             estate_data["Location"] = city_match[1]
                         except:
                             pass
+                        
+                    # PLZ extrahieren
+                    plz_match = re.search(r"\b\d{5}\b", estate_data["Location"])
+                    # PLZ in Datenstruktur speichern
+                    if plz_match:
+                        try:
+                            estate_data["PLZ"] = plz_match.group(0).strip()
+                        except:
+                            pass
 
                     # Preisdaten extrahieren
                     pricing_match = re.search(
@@ -183,7 +165,7 @@ def run():
                                 re.DOTALL,
                             )
                             cold_price = re.sub(r"\.", "", cold_price.group(1))
-                            estate_data["Cold Price"] = cold_price
+                            estate_data["Cold Price"] = cold_price.replace(",", ".")
 
                             warm_price = re.search(
                                 r'Gesamtmiete:</td> <td class="font-bold text-green-emphasis"> (.*?)&nbsp;',
@@ -192,7 +174,7 @@ def run():
                             )
                             warm_price = re.sub(r"\.", "", warm_price.group(1))
                             if "kA" in warm_price: warm_price= "k.A."
-                            estate_data["Warm Price"] = warm_price
+                            estate_data["Warm Price"] = warm_price.replace(",", ".")
 
                             utilities_cost = re.search(
                                 r"Nebenkosten: </td> <td> (.*?)&nbsp;",
@@ -260,18 +242,18 @@ def run():
                             amenities = []
                             for match in key_amenities:
                                 if "balkon" in match.lower():
-                                    estate_data["Balcony"] = "Verfügbar"
+                                    estate_data["Balcony"] = True
                                 elif "garten" in match.lower():
-                                    estate_data["Garden"] = "Verfügbar"
+                                    estate_data["Garden"] = True
                                 elif "terrasse" in match.lower():
-                                    estate_data["Terrace"] = "Verfügbar"
+                                    estate_data["Terrace"] = True
                                 elif "aufzug" in match.lower():
-                                    estate_data["Elevator"] = "Verfügbar"
+                                    estate_data["Elevator"] = True
                                 elif (
                                     "einbauküche" in match.lower()
                                     or "ebk" in match.lower()
                                 ):
-                                    estate_data["Kitchen"] = "Verfügbar"
+                                    estate_data["Kitchen"] = True
                                 else:
                                     amenities.append(match.strip())
 
@@ -307,6 +289,49 @@ def run():
                         except:
                             pass
 
-                    # Alle Daten in CSV-Datei schreiben
-                    writer.writerow(estate_data)
-                    print("✅")
+                    # Alle relevanten Daten zusammenfassen
+                    insert_data = (
+                        estate_data["PLZ"],                  # FK_Postleitzahl
+                        estate_data["Warm Price"],           # Preis_warm
+                        estate_data["Cold Price"],           # Preis_kalt
+                        estate_data["Room Size (m²)"],       # Groesse in qm
+                        estate_data["Number of Rooms"],      # Anzahl_Räume
+                        estate_data["Level"],                # Etage
+                        estate_data["Year of Construction"], # Baujahr
+                        estate_data["Elevator"],             # Aufzug (1 = Ja, 0 = Nein)
+                        estate_data["Parking"],              # Parkplaetze
+                        estate_data["Kitchen"],              # Kueche
+                        estate_data["Balcony"],              # Balkon
+                        estate_data["Garden"],               # Garten
+                        estate_data["Terrace"],              # Terrasse
+                        estate_data["Energy Source"]         # Energie
+)
+                    
+                    # SQL-Befehl mit Platzhaltern
+                    insert = """
+                            INSERT IGNORE INTO Immobilie (
+                                FK_Postleitzahl, Preis_warm, Preis_kalt, Groesse, Anzahl_Räume, 
+                                Etage, Baujahr, Aufzug, Parkplaetze, Kueche, Balkon, Garten, Terrasse, Energie
+                            ) 
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """
+
+                    # Befehl ausführen
+                    cursor.execute(insert, insert_data)
+                    db.commit()
+
+# Verbindung zu MySQL herstellen
+def connect():
+    try:
+        db = mysql.connector.connect(
+            host=os.getenv("MYSQL_HOST"),
+            user=os.getenv("MYSQL_USER"),
+            password=os.getenv("MYSQL_PASSWORD"),
+            database=os.getenv("MYSQL_DATABASE")
+        )
+        return db
+    except Exception as e:
+        print(e)
+        return None    
+
+run()
