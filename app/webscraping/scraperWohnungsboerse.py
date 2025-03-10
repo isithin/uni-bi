@@ -309,7 +309,7 @@ def scrape(db, cursor):
                     
                     # SQL-Befehl mit Platzhaltern
                     insert = """
-                            INSERT INTO Immobilie (
+                            INSERT IGNORE INTO Immobilie (
                                 FK_Postleitzahl, Preis_warm, Preis_kalt, Groesse, Anzahl_Räume, 
                                 Etage, Baujahr, Aufzug, Parkplaetze, Kueche, Balkon, Garten, Terrasse, Energie
                             ) 
