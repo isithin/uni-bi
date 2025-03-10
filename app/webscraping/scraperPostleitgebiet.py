@@ -45,7 +45,7 @@ def scrape(db, cursor):
                 )
                 # SQL-Befehl mit Platzhaltern
                 insert = """
-                        INSERT INTO Postleitgebiet (
+                        INSERT IGNORE INTO Postleitgebiet (
                             Postleitzahl, Ortsteil, FK_Bezirksname
                         ) 
                     VALUES (%s, %s, %s)
