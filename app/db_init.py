@@ -6,20 +6,20 @@ import os
 time.sleep(10)
 
 # Verbindung zu MySQL herstellen
-def connect():
+def connect(database):
     try:
         db = mysql.connector.connect(
             host=os.getenv("MYSQL_HOST"),
             user="root",
             password=os.getenv("MYSQL_ROOT_PASSWORD"),
-            database="mysql"
+            database=database
         )
         return db
     except Exception as e:
         print(e)
         return None
 
-def create_table(cursor):
+def create_databases(cursor):
     cursor.execute(
         """
         CREATE DATABASE IF NOT EXISTS grafana
@@ -30,6 +30,8 @@ def create_table(cursor):
         CREATE DATABASE IF NOT EXISTS bi
         """
     )
+
+def grant_privileges(cursor):
 
     # User anlegen
     grafana_user = "CREATE USER IF NOT EXISTS 'grafanaReader' IDENTIFIED BY '%s';" % os.getenv("GF_DATABASE_PASSWORD")
@@ -49,6 +51,9 @@ def create_table(cursor):
         GRANT ALL PRIVILEGES ON grafana.* TO 'grafanaReader'
         """
         )
+
+def create_table(cursor):
+
     # Test
     cursor.execute(
         """
@@ -152,13 +157,23 @@ def read_data(cursor):
         print(row)
 
 def main():
-    db = connect()
+    db = connect(mysql)
     if db is not None:
         print("Connected to MySQL")
     else:
         print("Connection to MySQL failed")
     cursor = db.cursor()
+    create_databases(cursor)
+    grant_privileges(cursor)
+    cursor.close()
+    db.close()
 
+    db = connect(bi)
+    if db is not None:
+        print("Connected to MySQL")
+    else:
+        print("Connection to MySQL failed")
+    cursor = db.cursor()
     create_table(cursor)
     insert_data(cursor, db, "INSERT INTO example (name) VALUES ('MiiiTest')")
     read_data(cursor) # Just for debugging
