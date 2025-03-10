@@ -157,7 +157,7 @@ def read_data(cursor):
         print(row)
 
 def main():
-    db = connect(root,os.getenv("MYSQL_ROOT_PASSWORD"),mysql)
+    db = connect("root",os.getenv("MYSQL_ROOT_PASSWORD"),"mysql")
     if db is not None:
         print("Connected to MySQL")
     else:
@@ -168,7 +168,7 @@ def main():
     cursor.close()
     db.close()
 
-    db = connect(os.getenv("MYSQL_USER"),os.getenv("MYSQL_PASSWORD"),mysql)
+    db = connect(os.getenv("MYSQL_USER"),os.getenv("MYSQL_PASSWORD"),"bi")
     if db is not None:
         print("Connected to MySQL")
     else:
