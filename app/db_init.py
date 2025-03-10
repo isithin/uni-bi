@@ -77,6 +77,7 @@ def create_table(cursor):
         """
         CREATE TABLE IF NOT EXISTS Postleitgebiet (
             Postleitzahl         VARCHAR(10) NOT NULL,
+            Ortsteil             VARCHAR(50),
             FK_Bezirksname       VARCHAR(50) NOT NULL,
             PRIMARY KEY (Postleitzahl),
             FOREIGN KEY (FK_Bezirksname) REFERENCES Bezirk(Name)

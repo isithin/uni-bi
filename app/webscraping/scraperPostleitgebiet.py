@@ -21,8 +21,6 @@ def scrape(db, cursor):
     ortsteil_pattern = re.compile(r"<h4>(?:PLZ vom Ortsteil )?(.*?)<\/h4>")
     plz_pattern = re.compile(r"<li>(\d{5})<\/li>")
 
-    # Daten speichern
-    plz_data = []
     bezirk = None
     ortsteil = None
 
@@ -40,9 +38,19 @@ def scrape(db, cursor):
     
         elif plz_match and ortsteil and bezirk:
             for plz in plz_match:
-                plz_data.append({"PLZ": plz, "Ortsteil": ortsteil, "Bezirk": bezirk})
-                data = plz + ", " + "'"+bezirk.replace("Die Postleitzahlen ", "")+"'"
-                cursor.execute("INSERT IGNORE INTO Postleitgebiet (Postleitzahl, FK_Bezirksname) VALUES ("+data+")")
+                insert_data = (
+                    plz,
+                    ortsteil,
+                    bezirk.replace("Die Postleitzahlen ", "")
+                )
+                # SQL-Befehl mit Platzhaltern
+                insert = """
+                        INSERT INTO Postleitgebiet (
+                            Postleitzahl, Ortsteil, FK_Bezirksname
+                        ) 
+                    VALUES (%s, %s, %s)
+                """
+                cursor.execute(insert, insert_data)
                 db.commit()
 
     cursor.close()
