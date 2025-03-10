@@ -6,12 +6,12 @@ import os
 time.sleep(10)
 
 # Verbindung zu MySQL herstellen
-def connect(database):
+def connect(user, password, database):
     try:
         db = mysql.connector.connect(
             host=os.getenv("MYSQL_HOST"),
-            user="root",
-            password=os.getenv("MYSQL_ROOT_PASSWORD"),
+            user=user,
+            password=password,
             database=database
         )
         return db
@@ -157,7 +157,7 @@ def read_data(cursor):
         print(row)
 
 def main():
-    db = connect(mysql)
+    db = connect(root,os.getenv("MYSQL_ROOT_PASSWORD"),mysql)
     if db is not None:
         print("Connected to MySQL")
     else:
@@ -168,7 +168,7 @@ def main():
     cursor.close()
     db.close()
 
-    db = connect(bi)
+    db = connect(os.getenv("MYSQL_USER"),os.getenv("MYSQL_PASSWORD"),mysql)
     if db is not None:
         print("Connected to MySQL")
     else:
