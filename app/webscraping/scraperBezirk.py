@@ -1,10 +1,7 @@
-import re
 import pandas as pd
 import os
-import string
 from urllib.request import urlopen
 import mysql.connector
-import html
 
 def run():
     db=connect()
@@ -79,7 +76,7 @@ def scrape(db, cursor):
     db.commit()
         
     print(berliner_bezirke)
-    
+
     cursor.close()
     db.close()
 
