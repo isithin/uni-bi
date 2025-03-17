@@ -41,7 +41,7 @@ def scrape(db, cursor):
                 insert_data = (
                     plz,
                     ortsteil,
-                    bezirk.replace("Die Postleitzahlen ", "")
+                    bezirk.replace("Die Postleitzahlen ", "").replace("Berlin ", "").replace(" Hohenschönhause", "")
                 )
                 # SQL-Befehl mit Platzhaltern
                 insert = """
