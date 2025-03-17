@@ -67,13 +67,11 @@ def create_table(cursor):
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS Bezirk (
-            Name                 VARCHAR(50) NOT NULL,
-            Durchschnittsalter   DECIMAL(4,1), 
-            Durchschnittseinkommen DECIMAL(10,2),
-            Schulabschluss       VARCHAR(50),
-            Migrationsrate       DECIMAL(5,2),
-            Kriminalitaetsrate   DECIMAL(5,2),
-            Parkplatz_pro_Kopf   DECIMAL(5,2),
+            Name                        VARCHAR(50) NOT NULL,
+            Durchschnittsalter          DECIMAL(4,1), 
+            Armutsgefährdungsquote      DECIMAL(4,1),
+            Geringqualifikationsquote   DECIMAL(4,1),
+            Erwerbslosigkeitsquote      DECIMAL(4,1),
             PRIMARY KEY (Name)
         );
         """
