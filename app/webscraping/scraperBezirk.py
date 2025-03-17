@@ -42,8 +42,8 @@ def scrape(db, cursor):
                 # Das Dictionary aktualisieren, indem das Durchschnittsalter zu dem Bezirk hinzugefügt wird
                 berliner_bezirke[bezirk].append(durchschnittsalter)
 
-    # A1a I Armutsgefährdungsquoten der Bevölkerung 2022::
-    for bezirk, armutsGefQuote in zip(df_armutsgef["Unnamed: 1"].iloc[8:19], df_armutsgef["Unnamed: 19"].iloc[8:19]):
+    # A1a I Armutsgefährdungsquoten der Bevölkerung 2022:
+    for bezirk, armutsGefQuote in zip(df_armutsgef["Unnamed: 1"].iloc[7:19], df_armutsgef["Unnamed: 19"].iloc[7:19]):
         berliner_bezirke[bezirk].append(armutsGefQuote)
 
     # D1 Anteil der ab 25-Jährigen mit niedrigem Bildungsstand (ISCED 0-2)¹ an der gleichaltrigen Bevölkerungsgruppe 2022:
