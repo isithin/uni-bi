@@ -15,20 +15,16 @@ def run():
     engine = create_engine(f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}")
 
     # URL der Excel-Datei
-    url = "https://www.kriminalitaetsatlas.berlin.de/K-Atlas/bezirke/Fallzahlen%26HZ%202014-2023.xlsx"
-
-    # Datei herunterladen
-    response = requests.get(url)
-    xls = pd.ExcelFile(BytesIO(response.content))
+    file_path_kriminalität = r"https://www.kriminalitaetsatlas.berlin.de/K-Atlas/bezirke/Fallzahlen%26HZ%202014-2023.xlsx"
 
     # Relevantes Sheet laden (2023er Daten)
-    df = pd.read_excel(xls, sheet_name="Fallzahlen_2023", skiprows=4)
+    df = pd.read_excel(file_path_kriminalität, sheet_name="Fallzahlen_2023", skiprows=4)
 
     # Erste beiden Spalten umbenennen (falls nötig)
-    df.rename(columns={df.columns[0]: "LOR_Schluessel", df.columns[1]: "Bezirk"}, inplace=True)
+    df.rename(columns={df.columns[0]: "LOR_Schluessel", df.columns[1]: "Ortsteil"}, inplace=True)
 
     # Leere Zeilen entfernen
-    df.dropna(subset=["LOR_Schluessel", "Bezirk"], inplace=True)
+    df.dropna(subset=["LOR_Schluessel"], inplace=True)
 
     # Daten in MySQL-Tabelle schreiben
     df.to_sql("kriminalitaet", con=engine, if_exists="replace", index=False)
