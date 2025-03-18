@@ -86,8 +86,8 @@ def scrape(db, cursor):
     # Eintrag in Datenbank
     # SQL-Befehl mit Platzhaltern
     insert = """
-    INSERT IGNORE INTO Kriminalitaet (
-        Bezirk, Durchschnittsalter, Armutsgefährdungsquote, Geringqualifikationsquote,
+    INSERT IGNORE INTO Bezirk (
+        Name, Durchschnittsalter, Armutsgefährdungsquote, Geringqualifikationsquote,
         Erwerbslosigkeitsquote, Straftaten_gesamt, Raub, Strassenraub,
         Koerperverletzung_gesamt, Gefaehrliche_Koerperverletzung, Freiheitsberaubung,
         Diebstahl_gesamt, Diebstahl_Kraftwagen, Diebstahl_Kfz, Fahrraddiebstahl,
