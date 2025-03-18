@@ -72,6 +72,23 @@ def create_table(cursor):
             Armutsgefährdungsquote      DECIMAL(4,1),
             Geringqualifikationsquote   DECIMAL(4,1),
             Erwerbslosigkeitsquote      DECIMAL(4,1),
+            Straftaten_gesamt           INT,
+            Raub                        INT,
+            Strassenraub                INT,
+            Koerperverletzung_gesamt    INT,
+            Gefaehrliche_Koerperverletzung INT,
+            Freiheitsberaubung          INT,
+            Diebstahl_gesamt            INT,
+            Diebstahl_Kraftwagen        INT,
+            Diebstahl_Kfz               INT,
+            Fahrraddiebstahl            INT,
+            Wohnungseinbruch            INT,
+            Branddelikte_gesamt         INT,
+            Brandstiftung               INT,
+            Sachbeschaedigung_gesamt    INT,
+            Sachbeschaedigung_Graffiti  INT,
+            Rauschgiftdelikte           INT,
+            Kieztaten                   INT,
             PRIMARY KEY (Name)
         );
         """
