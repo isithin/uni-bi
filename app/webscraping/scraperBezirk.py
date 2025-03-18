@@ -100,7 +100,7 @@ def scrape(db, cursor):
     # Daten aus dem Dictionary in die Tabelle einfügen
     for bezirk, daten_liste in berliner_bezirke.items():
         for daten in daten_liste:
-            cursor.execute(insert, [bezirk] + daten)
+            cursor.execute(insert, [bezirk].extend(daten))
 
     # Änderungen in der Datenbank speichern
     db.commit()
