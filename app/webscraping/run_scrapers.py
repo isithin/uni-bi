@@ -33,10 +33,6 @@ if __name__ == "__main__":
     scraperWohnungsboerse.run()
     print("")
 
-    # Kriminalitätsraten scraper starten
-    print("📡 Scraping Kriminalitätsquoten...")
-    scraperKrimminalität.run()
-    print("")
 
 
 
