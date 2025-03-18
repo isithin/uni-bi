@@ -1,6 +1,4 @@
 import pandas as pd
-import requests
-from io import BytesIO
 from sqlalchemy import create_engine
 import os
 
