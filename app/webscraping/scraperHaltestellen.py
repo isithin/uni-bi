@@ -115,8 +115,8 @@ def scrape_UBahnhöfe(db, cursor):
 
                 insert = """
                         INSERT IGNORE INTO Haltestelle (
-                            Name, Ortsteil, S-Bahn,
-                            Regionalverkehr, Fehrnverkehr, U-Bahn
+                            Name, Ortsteil, S_Bahn,
+                            Regionalverkehr, Fernverkehr, U_Bahn
                         )
                     VALUES (%s, %s, %s, %s, %s, %s)
                 """
