@@ -156,7 +156,7 @@ def create_table(cursor):
             Regionalverkehr      BOOLEAN,
             Fernverkehr          BOOLEAN,
             U_Bahn               BOOLEAN,
-            PRIMARY KEY (ID),
+            PRIMARY KEY (ID)
         );
         """
     )
