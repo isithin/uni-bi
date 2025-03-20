@@ -151,7 +151,7 @@ def create_table(cursor):
             ID                   INT NOT NULL AUTO_INCREMENT,
             Name                 VARCHAR(50)
             Ortsteil             VARCHAR(10) NOT NULL,
-            Preisklasse          INT(1),
+            Preisklasse          INT,
             S-Bahn               BOOlEAN,
             Regionalverkehr      BOOLEAN,
             Fernverkehr          BOOLEAN,
