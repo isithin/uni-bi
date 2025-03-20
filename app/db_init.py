@@ -152,10 +152,10 @@ def create_table(cursor):
             Name                 VARCHAR(50),
             Ortsteil             VARCHAR(10) NOT NULL,
             Preisklasse          INT,
-            S-Bahn               BOOlEAN,
+            S_Bahn               BOOlEAN,
             Regionalverkehr      BOOLEAN,
             Fernverkehr          BOOLEAN,
-            U-Bahn               BOOLEAN,
+            U_Bahn               BOOLEAN,
             PRIMARY KEY (ID),
         );
         """
