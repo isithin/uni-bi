@@ -3,8 +3,12 @@ import scraperBezirk
 import scraperPostleitgebiet
 import scraperWohnungsboerse
 import scraperSupermarkt
+<<<<<<< HEAD
 import scraperKrimminalität
 import scraperFreizeitangebote
+=======
+import scraperHaltestellen
+>>>>>>> c169d28 (add Haltestellen-scraper to run_scrapers)
 
 # Diese Datei ausführen, um die beiden Scraper zu starten
 if __name__ == "__main__":
@@ -34,11 +38,18 @@ if __name__ == "__main__":
     scraperWohnungsboerse.run()
     print("")
 
+<<<<<<< HEAD
     # Freizeitangebote scraper starten
     print("📡 Scraping Freizeitangebote...")
     scraperFreizeitangebote.run()
     print("")
 
+=======
+    # Haltestellen scraper starten
+    print("📡 Scraping Haltestellen...")
+    scraperHaltestellen.run()
+    print("")
+>>>>>>> c169d28 (add Haltestellen-scraper to run_scrapers)
 
 
     # Ergebnisse anzeigen
