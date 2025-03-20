@@ -149,12 +149,14 @@ def create_table(cursor):
         """
         CREATE TABLE IF NOT EXISTS Haltestelle (
             ID                   INT NOT NULL AUTO_INCREMENT,
-            FK_Postleitzahl      VARCHAR(10) NOT NULL,
-            Transportmittel      VARCHAR(50),
+            Name                 VARCHAR(50)
+            Ortsteil             VARCHAR(10) NOT NULL,
+            Preisklasse          INT(1),
+            S-Bahn               BOOlEAN,
+            Regionalverkehr      BOOLEAN,
+            Fernverkehr          BOOLEAN,
+            U-Bahn               BOOLEAN,
             PRIMARY KEY (ID),
-            FOREIGN KEY (FK_Postleitzahl) REFERENCES Postleitgebiet(Postleitzahl)
-              ON UPDATE CASCADE
-              ON DELETE CASCADE
         );
         """
     )
