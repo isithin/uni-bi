@@ -35,24 +35,35 @@ def scrape(db, cursor):
     
         elif ortsteil_match:
             ortsteil = html.unescape(ortsteil_match.group(1).strip())
+            insert_data = (
+                    ortsteil,
+                    bezirk.replace("Die Postleitzahlen ", "").replace("Berlin ", "").replace(" Hohenschönhausen", "")
+                )
+            # SQL-Befehl mit Platzhaltern
+            insert = """
+                    INSERT IGNORE INTO Ortsteil (
+                        Name, FK_Bezirksname
+                    ) 
+                VALUES (%s, %s)
+            """
+            cursor.execute(insert, insert_data)
     
         elif plz_match and ortsteil and bezirk:
             for plz in plz_match:
                 insert_data = (
                     plz,
                     ortsteil,
-                    bezirk.replace("Die Postleitzahlen ", "").replace("Berlin ", "").replace(" Hohenschönhausen", "")
                 )
                 # SQL-Befehl mit Platzhaltern
                 insert = """
                         INSERT IGNORE INTO Postleitgebiet (
-                            Postleitzahl, Ortsteil, FK_Bezirksname
+                            Postleitzahl, FK_Ortsteil
                         ) 
-                    VALUES (%s, %s, %s)
+                    VALUES (%s, %s)
                 """
                 cursor.execute(insert, insert_data)
-                db.commit()
 
+    db.commit()
     cursor.close()
     db.close()
 
