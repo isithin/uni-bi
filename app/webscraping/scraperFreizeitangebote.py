@@ -34,13 +34,14 @@ def scrape(db, cursor):
             typ = element.get("tags", {}).get("amenity") or element.get("tags", {}).get("leisure")
             lat, lon = element["lat"], element["lon"]
             plz = get_postal_code(lat, lon)
+            print([plz, name, typ])
 
             sql = """
                     INSERT IGNORE INTO Freizeitangebot (FK_Postleitzahl, Name, Art) 
                     VALUES (%s, %s, %s)
                     ON DUPLICATE KEY UPDATE Name = VALUES(Name)
              """
-            cursor.execute(sql, (plz, name, typ))
+            cursor.execute(sql, [plz, name, typ])
             db.commit()
 
     else:
@@ -50,8 +51,9 @@ def get_postal_code(lat, lon):
     url = f"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}"
     response = requests.get(url, headers={"User-Agent": "FreizeitScraper"})
     data = response.json()
-    
-    return data.get("address", {}).get("postcode", "Keine PLZ gefunden")
+    address = data.get("address", {})
+    if "Berlin" in address.get("city", "") or "Berlin" in address.get("state", ""):
+        return address.get("postcode", "Keine PLZ"), address.get("city", "Unbekannt")
 
 # Verbindung zu MySQL herstellen
 def connect():
