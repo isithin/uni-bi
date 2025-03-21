@@ -62,7 +62,7 @@ def scrape_Bahnhöfe_Haltepunkte(db, cursor):
 
             insert = """
                     INSERT IGNORE INTO Haltestelle (
-                        Name, Ortsteil, Preisklasse, S_Bahn,
+                        Name, FK_Ortsteil, Preisklasse, S_Bahn,
                         Regionalverkehr, Fernverkehr, U_Bahn
                     )
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
@@ -115,7 +115,7 @@ def scrape_UBahnhöfe(db, cursor):
 
                 insert = """
                         INSERT IGNORE INTO Haltestelle (
-                            Name, Ortsteil, S_Bahn,
+                            Name, FK_Ortsteil, S_Bahn,
                             Regionalverkehr, Fernverkehr, U_Bahn
                         )
                     VALUES (%s, %s, %s, %s, %s, %s)

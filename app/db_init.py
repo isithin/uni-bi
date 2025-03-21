@@ -98,7 +98,7 @@ def create_table(cursor):
         CREATE TABLE IF NOT EXISTS Ortsteil (
             Name                 VARCHAR(50) NOT NULL,
             FK_Bezirksname       VARCHAR(50) NOT NULL,
-            PRIMARY KEY (Ortsteil),
+            PRIMARY KEY (Name),
             FOREIGN KEY (FK_Bezirksname) REFERENCES Bezirk(Name)
               ON UPDATE CASCADE 
               ON DELETE RESTRICT
