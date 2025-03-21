@@ -33,13 +33,14 @@ def scrape(db, cursor):
             name = element.get("tags", {}).get("name", "Unbekannt")
             typ = element.get("tags", {}).get("amenity") or element.get("tags", {}).get("leisure")
             lat, lon = element["lat"], element["lon"]
+            plz = get_postal_code(lat, lon)
 
             sql = """
                     INSERT INTO Freizeitangebot (FK_Postleitzahl, Name, Art) 
                     VALUES (%s, %s, %s)
                     ON DUPLICATE KEY UPDATE Name = VALUES(Name)
              """
-            cursor.execute(sql, (get_postal_code(lat, lon), name, typ))
+            cursor.execute(sql, (plz, name, typ))
             db.commit()
 
     else:

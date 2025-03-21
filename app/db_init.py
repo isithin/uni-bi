@@ -179,6 +179,7 @@ def create_table(cursor):
         CREATE TABLE IF NOT EXISTS Freizeitangebot (
             ID                   INT NOT NULL AUTO_INCREMENT,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
+            Name                 VARCHAR(50),
             Art                  VARCHAR(50),
             PRIMARY KEY (ID),
             FOREIGN KEY (FK_Postleitzahl) REFERENCES Postleitgebiet(Postleitzahl)
