@@ -95,11 +95,11 @@ def create_table(cursor):
     )
     cursor.execute(
         """
-        CREATE TABLE IF NOT EXISTS Postleitgebiet (
-            Postleitzahl         VARCHAR(10) NOT NULL,
-            FK_Ortsteil          VARCHAR(50) NOT NULL,
-            PRIMARY KEY (Postleitzahl),
-            FOREIGN KEY (FK_Ortsteil) REFERENCES Ortsteil(Name)
+        CREATE TABLE IF NOT EXISTS Ortsteil (
+            Name                 VARCHAR(50) NOT NULL,
+            FK_Bezirksname       VARCHAR(50) NOT NULL,
+            PRIMARY KEY (Ortsteil),
+            FOREIGN KEY (FK_Bezirksname) REFERENCES Bezirk(Name)
               ON UPDATE CASCADE 
               ON DELETE RESTRICT
         );
@@ -107,11 +107,11 @@ def create_table(cursor):
     )
     cursor.execute(
         """
-        CREATE TABLE IF NOT EXISTS Ortsteil (
-            Name                 VARCHAR(50) NOT NULL,
-            FK_Bezirksname       VARCHAR(50) NOT NULL,
-            PRIMARY KEY (Ortsteil),
-            FOREIGN KEY (FK_Bezirksname) REFERENCES Bezirk(Name)
+        CREATE TABLE IF NOT EXISTS Postleitgebiet (
+            Postleitzahl         VARCHAR(10) NOT NULL,
+            FK_Ortsteil          VARCHAR(50) NOT NULL,
+            PRIMARY KEY (Postleitzahl),
+            FOREIGN KEY (FK_Ortsteil) REFERENCES Ortsteil(Name)
               ON UPDATE CASCADE 
               ON DELETE RESTRICT
         );
