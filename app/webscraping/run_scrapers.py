@@ -3,6 +3,7 @@ import scraperBezirk
 import scraperPostleitgebiet
 import scraperWohnungsboerse
 import scraperSupermarkt
+import scraperFreizeitangebote
 import scraperHaltestellen
 
 # Diese Datei ausführen, um die beiden Scraper zu starten
