@@ -1,7 +1,7 @@
 FROM python:3.9
 
 RUN pip install --no-cache-dir mysql-connector-python
-RUN pip install pandas openpyxl sqlalchemy pymysql
+RUN pip install pandas openpyxl sqlalchemy pymysql requests
 
 ADD app /app
 
