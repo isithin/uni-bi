@@ -36,7 +36,7 @@ def scrape(db, cursor):
             plz = get_postal_code(lat, lon)
 
             sql = """
-                    INSERT INTO Freizeitangebot (FK_Postleitzahl, Name, Art) 
+                    INSERT IGNORE INTO Freizeitangebot (FK_Postleitzahl, Name, Art) 
                     VALUES (%s, %s, %s)
                     ON DUPLICATE KEY UPDATE Name = VALUES(Name)
              """
