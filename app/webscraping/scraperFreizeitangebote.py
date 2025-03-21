@@ -34,7 +34,6 @@ def scrape(db, cursor):
             typ = element.get("tags", {}).get("amenity") or element.get("tags", {}).get("leisure")
             lat, lon = element["lat"], element["lon"]
             plz = get_postal_code(lat, lon)
-            print([plz, name, typ])
 
             sql = """
                     INSERT IGNORE INTO Freizeitangebot (FK_Postleitzahl, Name, Art) 
