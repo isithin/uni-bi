@@ -53,7 +53,7 @@ def get_postal_code(lat, lon):
     data = response.json()
     address = data.get("address", {})
     if "Berlin" in address.get("city", "") or "Berlin" in address.get("state", ""):
-        return address.get("postcode", "Keine PLZ"), address.get("city", "Unbekannt")
+        return address.get("postcode", "Keine PLZ")
 
 # Verbindung zu MySQL herstellen
 def connect():
