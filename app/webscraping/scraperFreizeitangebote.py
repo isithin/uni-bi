@@ -21,10 +21,10 @@ def scrape(db, cursor):
     [out:json];
     area[name="Berlin"]->.searchArea;
     (
-      node["leisure"="playground"](area.searchArea);
       node["amenity"="cinema"](area.searchArea);
       node["amenity"="theatre"](area.searchArea);
       node["amenity"="nightclub"](area.searchArea);
+      node["leisure"="playground"](area.searchArea);
     );
     out body;   
     """
