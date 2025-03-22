@@ -20,8 +20,7 @@ def scrape(db, cursor):
     query = f"""
     [out:json];
     (
-      node["amenity"="museum"](around:{RADIUS},{BERLIN_CENTER});
-      node["leisure"="park"](around:{RADIUS},{BERLIN_CENTER});
+      node["leisure"="museum"](around:{RADIUS},{BERLIN_CENTER});
       node["leisure"="playground"](around:{RADIUS},{BERLIN_CENTER});
     );
     out body;   
