@@ -38,8 +38,7 @@ def scrape(db, cursor):
             if request_count >= request_limit: return
             name = element.get("tags", {}).get("name", "Unbekannt")
             typ = element.get("tags", {}).get("amenity") or element.get("tags", {}).get("leisure")
-            lat, lon = element["lat"], element["lon"]
-            plz = get_postal_code(lat, lon)
+            plz = element.get("tags", {}).get("addr:postcode") or get_postal_code(element["lat"], element["lon"])
             request_count += 1
 
             sql = """
