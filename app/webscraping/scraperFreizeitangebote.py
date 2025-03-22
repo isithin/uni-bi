@@ -13,6 +13,9 @@ def scrape(db, cursor):
     BERLIN_CENTER = "52.5200,13.4050"
     RADIUS = 20000  # 20 km
 
+    request_limit = 2400
+    request_count = 0
+
     # Overpass API Abfrage (z. B. Restaurants + Parks + Spielplätze)
     query = f"""
     [out:json];
@@ -30,10 +33,12 @@ def scrape(db, cursor):
     if response.status_code == 200:
         data = response.json()
         for element in data["elements"]:
+            if request_count >= request_limit: return
             name = element.get("tags", {}).get("name", "Unbekannt")
             typ = element.get("tags", {}).get("amenity") or element.get("tags", {}).get("leisure")
             lat, lon = element["lat"], element["lon"]
             plz = get_postal_code(lat, lon)
+            request_count += 1
 
             sql = """
                     INSERT IGNORE INTO Freizeitangebot (FK_Postleitzahl, Name, Art) 
