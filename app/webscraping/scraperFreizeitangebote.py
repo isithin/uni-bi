@@ -19,9 +19,10 @@ def scrape(db, cursor):
     # Overpass API Abfrage (z. B. Museums + Parks + Spielplätze)
     query = f"""
     [out:json];
+    area[name="Berlin"]->.searchArea;
     (
-      node["leisure"="museum"](around:{RADIUS},{BERLIN_CENTER});
-      node["leisure"="playground"](around:{RADIUS},{BERLIN_CENTER});
+      node["leisure"="golf_course"](area.searchArea);
+      node["leisure"="playground"](area.searchArea);
     );
     out body;   
     """
