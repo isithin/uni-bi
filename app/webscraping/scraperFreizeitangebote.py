@@ -16,11 +16,11 @@ def scrape(db, cursor):
     request_limit = 2400
     request_count = 0
 
-    # Overpass API Abfrage (z. B. Restaurants + Parks + Spielplätze)
+    # Overpass API Abfrage (z. B. Museums + Parks + Spielplätze)
     query = f"""
     [out:json];
     (
-      node["amenity"="restaurant"](around:{RADIUS},{BERLIN_CENTER});
+      node["amenity"="museum"](around:{RADIUS},{BERLIN_CENTER});
       node["leisure"="park"](around:{RADIUS},{BERLIN_CENTER});
       node["leisure"="playground"](around:{RADIUS},{BERLIN_CENTER});
     );
