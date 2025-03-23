@@ -3,7 +3,6 @@ import scraperBezirk
 import scraperPostleitgebiet
 import scraperWohnungsboerse
 import scraperSupermarkt
-import scraper-freizeitangebote
 import scraperFreizeitangebote
 import scraperHaltestellen
 
