@@ -3,6 +3,7 @@ import scraperBezirk
 import scraperPostleitgebiet
 import scraperWohnungsboerse
 import scraperSupermarkt
+import scraper-freizeitangebote
 import scraperFreizeitangebote
 import scraperHaltestellen
 
@@ -38,6 +39,7 @@ if __name__ == "__main__":
     print("📡 Scraping Freizeitangebote...")
     scraperFreizeitangebote.run()
     print("")
+
 
     # Haltestellen scraper starten
     print("📡 Scraping Haltestellen...")
