@@ -3,6 +3,8 @@ import scraperBezirk
 import scraperPostleitgebiet
 import scraperWohnungsboerse
 import scraperSupermarkt
+import scraper-freizeitangebote
+import scraperFreizeitangebote
 import scraperHaltestellen
 
 # Diese Datei ausführen, um die beiden Scraper zu starten
@@ -32,6 +34,12 @@ if __name__ == "__main__":
     print("📡 Scraping Wohnungsboerse...")
     scraperWohnungsboerse.run()
     print("")
+
+    # Freizeitangebote scraper starten
+    print("📡 Scraping Freizeitangebote...")
+    scraperFreizeitangebote.run()
+    print("")
+
 
     # Haltestellen scraper starten
     print("📡 Scraping Haltestellen...")
