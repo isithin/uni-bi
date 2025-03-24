@@ -15,7 +15,7 @@ def scrape(db, cursor):
         base_url = "https://www.wohnungsboerse.net/searches/index?estate_marketing_types=miete%2C1&marketing_type=miete&estate_types%5B0%5D=1&is_rendite=0&cities%5B0%5D=Berlin&term=Berlin&page={}"
 
         # Durch die ersten 50 Seiten der Suchergebnisse iterieren
-        for page_number in range(1, 5):
+        for page_number in range(1, 100):
             # URL für die aktuelle Seite erstellen
             url = base_url.format(page_number)
             print("")
