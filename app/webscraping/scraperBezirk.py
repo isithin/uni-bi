@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import re
+import html
 from urllib.request import urlopen
 import mysql.connector
 
@@ -23,6 +25,30 @@ def scrape(db, cursor):
         "Lichtenberg": [],
         "Reinickendorf": []
     }
+
+    url = "https://de.wikipedia.org/wiki/Verwaltungsgliederung_Berlins"
+    page = urlopen(url)
+    html_bytes = page.read()
+    htmlText = html_bytes.decode("utf-8")
+
+    # Reguläre Ausdrücke für Bezirke, Ortsteile und PLZ
+    bezirk_pattern = re.compile(r"<td style=\"text-align:left\"><span style=\"display:none;\">(.{5,26})<\/span>")
+    fläche_pattern = re.compile(r"<td>(?:<span style=\"visibility:hidden;\">0<\/span>)?(\d{2,3},\d\d)")
+
+    bezirk = None
+    fläche = None
+
+    # HTML Zeilenweise durchsuchen
+    for line in htmlText.split("\n"):
+        bezirk_match = bezirk_pattern.search(line)
+        fläche_match = fläche_pattern.search(line)
+
+        if bezirk_match:
+            bezirk = html.unescape(bezirk_match.group(1).strip())
+    
+        elif fläche_match and bezirk:
+            fläche = html.unescape(fläche_match.group(1).strip())
+            berliner_bezirke[bezirk].append(fläche)
 
     # Excel-Datei einlesen
     file_path_demografie = r"https://download.statistik-berlin-brandenburg.de/8b004f55d4a74860/f1f0744a299e/SB_A01-05-00_2024h01_BE.xlsx"
@@ -97,7 +123,7 @@ def scrape(db, cursor):
     # SQL-Befehl mit Platzhaltern
     insert = """
     INSERT IGNORE INTO Bezirk (
-        Name, Einwohner, Auslaender, Durchschnittsalter, Armutsgefährdungsquote, Geringqualifikationsquote,
+        Name, Fläche_Quadratkilometer, Einwohner, Auslaender, Durchschnittsalter, Armutsgefährdungsquote, Geringqualifikationsquote,
         Erwerbslosigkeitsquote, Straftaten_gesamt, Raub, Strassenraub,
         Koerperverletzung_gesamt, Gefaehrliche_Koerperverletzung, Freiheitsberaubung,
         Diebstahl_gesamt, Diebstahl_Kraftwagen, Diebstahl_Kfz, Fahrraddiebstahl,
@@ -105,7 +131,7 @@ def scrape(db, cursor):
         Sachbeschaedigung_gesamt, Sachbeschaedigung_Graffiti,
         Rauschgiftdelikte, Kieztaten
     ) 
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     # Daten aus dem Dictionary in die Tabelle einfügen
     for bezirk, daten_liste in berliner_bezirke.items():

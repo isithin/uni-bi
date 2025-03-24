@@ -68,6 +68,7 @@ def create_table(cursor):
         """
         CREATE TABLE IF NOT EXISTS Bezirk (
             Name                        VARCHAR(50) NOT NULL,
+            Fläche_Quadratkilometer     DECIMAL(3,2)
             Einwohner                   INT,
             Auslaender                  INT,
             Durchschnittsalter          DECIMAL(4,1), 
