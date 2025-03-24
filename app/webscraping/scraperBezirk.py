@@ -105,7 +105,7 @@ def scrape(db, cursor):
         Sachbeschaedigung_gesamt, Sachbeschaedigung_Graffiti,
         Rauschgiftdelikte, Kieztaten
     ) 
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     # Daten aus dem Dictionary in die Tabelle einfügen
     for bezirk, daten_liste in berliner_bezirke.items():
