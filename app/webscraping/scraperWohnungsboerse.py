@@ -181,11 +181,11 @@ def scrape(db, cursor, kauf):
                         try:
                             # Preisdaten extrahieren
                             price_match = re.search(
-                            r'([\d,.,,]*)&nbsp;&euro;\n',
+                            r'([\d,.]*)&nbsp;&euro;\n',
                             estate,
                             re.DOTALL
                             )
-                            price = price_match.group(1)
+                            price = price_match.group(1).replace(".", "") + ".00"
                             # Preisdaten in Datenstruktur speichern
                             estate_data["Price"] = price
                         except:
