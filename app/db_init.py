@@ -147,6 +147,30 @@ def create_table(cursor):
     )
     cursor.execute(
         """
+        CREATE TABLE IF NOT EXISTS Immobilie_Kauf (
+            ID                   INT NOT NULL AUTO_INCREMENT,
+            FK_Postleitzahl      VARCHAR(10) NOT NULL,
+            Preis                DECIMAL(12,2),
+            Groesse              INT,
+            Anzahl_Räume         INT,
+            Etage                INT,
+            Baujahr              INT,
+            Aufzug               BOOLEAN,
+            Parkplaetze          BOOLEAN,
+            Kueche               BOOLEAN,
+            Balkon               BOOLEAN,
+            Garten               BOOLEAN,
+            Terrasse             BOOLEAN,
+            Energie              VARCHAR(20),
+            PRIMARY KEY (ID),
+            FOREIGN KEY (FK_Postleitzahl) REFERENCES Postleitgebiet(Postleitzahl)
+              ON UPDATE CASCADE
+              ON DELETE CASCADE
+        );
+        """
+    )
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS Supermarkt (
             ID                   INT NOT NULL AUTO_INCREMENT,
             FK_Postleitzahl      VARCHAR(10) NOT NULL,

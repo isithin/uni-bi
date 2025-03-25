@@ -7,12 +7,14 @@ import mysql.connector
 def run():
     db=connect()
     cursor = db.cursor()
-    scrape(db, cursor)
+    scrape(db, cursor, True)
+    scrape(db, cursor, False)
 
-def scrape(db, cursor):
+def scrape(db, cursor, kauf):
     
         # Basis-URL für die Suche nach Mietwohnungen in Berlin
         base_url = "https://www.wohnungsboerse.net/searches/index?estate_marketing_types=miete%2C1&marketing_type=miete&estate_types%5B0%5D=1&is_rendite=0&cities%5B0%5D=Berlin&term=Berlin&page={}"
+        if kauf: base_url = "https://www.wohnungsboerse.net/searches/index?estate_marketing_types=kauf%2C1&marketing_type=kauf&estate_types%5B0%5D=1&is_rendite=0&cities%5B0%5D=Berlin&term=Berlin&page={}"
 
         # Durch die ersten 50 Seiten der Suchergebnisse iterieren
         for page_number in range(1, 150):
@@ -32,7 +34,7 @@ def scrape(db, cursor):
             estate_links = re.findall(link_pattern, html)
 
             # Andere Regex Pattern ignorieren, welche nicht zu den Immobilien-Seiten führen
-            pattern = r"https://www\.wohnungsboerse\.net/immodetail/\d+"
+            pattern = r"https://www\.wohnungsboerse\.net/immodetail(?:-k)?/\d+"
             estate_links = re.findall(pattern, html)
 
             # Anzahl der gefundenen Immobilien-Links pro Übersicht ausgeben
@@ -66,6 +68,32 @@ def scrape(db, cursor):
                         "Title": "",
                         "Warm Price": "",
                         "Cold Price": "",
+                        "Utilities Cost": "",
+                        "Deposit": "",
+                        "Room Size (m²)": "",
+                        "Number of Rooms": "",
+                        "Level": "0",
+                        "Location": "",
+                        "PLZ": "",
+                        "Amenities": "",
+                        "Env": "",
+                        "Year of Construction": "",
+                        "Move-in Date": "",
+                        "Elevator": False,
+                        "Parking": False,
+                        "Kitchen": False,
+                        "Balcony": False,
+                        "Garden": False,
+                        "Terrace": False,
+                        "Efficiency Class": "",
+                        "Energy Source": "",
+                        "Energy Demand": "",
+                        "Link": estate_url,
+                    }
+                    if kauf:
+                        estate_data = {
+                        "Title": "",
+                        "Price": "",
                         "Utilities Cost": "",
                         "Deposit": "",
                         "Room Size (m²)": "",
@@ -149,51 +177,67 @@ def scrape(db, cursor):
                         except:
                             pass
 
-                    # Preisdaten extrahieren
-                    pricing_match = re.search(
-                        r'<div class="grid-cols-12 p-4 md:grid bg-bg md:py-10 md:px-8">(.*?)</div>',
-                        estate,
-                        re.DOTALL,
-                    )
-                    # Preisdaten in Datenstruktur speichern
-                    if pricing_match:
+                    if kauf:
                         try:
-                            pricing_match = re.sub(r"\s+", " ", pricing_match.group(1))
-                            cold_price = re.search(
-                                r"Kaltmiete: </td> <td> (.*?)&nbsp;",
-                                pricing_match,
-                                re.DOTALL,
+                            # Preisdaten extrahieren
+                            price_match = re.search(
+                            r'([\d,.]*)&nbsp;&euro;\n',
+                            estate,
+                            re.DOTALL
                             )
-                            cold_price = re.sub(r"\.", "", cold_price.group(1))
-                            estate_data["Cold Price"] = cold_price.replace(",", ".")
-
-                            warm_price = re.search(
-                                r'Gesamtmiete:</td> <td class="font-bold text-green-emphasis"> (.*?)&nbsp;',
-                                pricing_match,
-                                re.DOTALL,
-                            )
-                            warm_price = re.sub(r"\.", "", warm_price.group(1))
-                            if "kA" in warm_price: warm_price= "k.A."
-                            estate_data["Warm Price"] = warm_price.replace(",", ".")
-
-                            utilities_cost = re.search(
-                                r"Nebenkosten: </td> <td> (.*?)&nbsp;",
-                                pricing_match,
-                                re.DOTALL,
-                            )
-                            utilities_cost = re.sub(r"\.", "", utilities_cost.group(1))
-                            estate_data["Utilities Cost"] = utilities_cost
-
-                            deposit = re.search(
-                                r"Kaution:</td> <td> (.*?)&nbsp;",
-                                pricing_match,
-                                re.DOTALL,
-                            )
-                            deposit = re.sub(r"\.", "", deposit.group(1))
-                            estate_data["Deposit"] = deposit
-
+                            price = price_match.group(1).replace(".", "") + ".00"
+                            # Preisdaten in Datenstruktur speichern
+                            estate_data["Price"] = price
                         except:
+                            print("passed")
                             pass
+
+                    else:
+                        # Preisdaten extrahieren
+                        pricing_match = re.search(
+                            r'<div class="grid-cols-12 p-4 md:grid bg-bg md:py-10 md:px-8">(.*?)</div>',
+                            estate,
+                            re.DOTALL,
+                        )
+                        # Preisdaten in Datenstruktur speichern
+                        if pricing_match:
+                            try:
+                                pricing_match = re.sub(r"\s+", " ", pricing_match.group(1))
+                                cold_price = re.search(
+                                    r"Kaltmiete: </td> <td> (.*?)&nbsp;",
+                                    pricing_match,
+                                    re.DOTALL,
+                                )
+                                cold_price = re.sub(r"\.", "", cold_price.group(1))
+                                estate_data["Cold Price"] = cold_price.replace(",", ".")
+
+                                warm_price = re.search(
+                                    r'Gesamtmiete:</td> <td class="font-bold text-green-emphasis"> (.*?)&nbsp;',
+                                    pricing_match,
+                                    re.DOTALL,
+                                )
+                                warm_price = re.sub(r"\.", "", warm_price.group(1))
+                                if "kA" in warm_price: warm_price= "k.A."
+                                estate_data["Warm Price"] = warm_price.replace(",", ".")
+
+                                utilities_cost = re.search(
+                                    r"Nebenkosten: </td> <td> (.*?)&nbsp;",
+                                    pricing_match,
+                                    re.DOTALL,
+                                )
+                                utilities_cost = re.sub(r"\.", "", utilities_cost.group(1))
+                                estate_data["Utilities Cost"] = utilities_cost
+
+                                deposit = re.search(
+                                    r"Kaution:</td> <td> (.*?)&nbsp;",
+                                    pricing_match,
+                                    re.DOTALL,
+                                )
+                                deposit = re.sub(r"\.", "", deposit.group(1))
+                                estate_data["Deposit"] = deposit
+
+                            except:
+                                pass
 
                     # Etagendaten extrahieren
                     level_match = re.search(
@@ -289,36 +333,68 @@ def scrape(db, cursor):
                         except:
                             pass
 
-                    # Alle relevanten Daten zusammenfassen
-                    insert_data = (
-                        estate_data["PLZ"],                  # FK_Postleitzahl
-                        estate_data["Warm Price"],           # Preis_warm
-                        estate_data["Cold Price"],           # Preis_kalt
-                        estate_data["Room Size (m²)"],       # Groesse in qm
-                        estate_data["Number of Rooms"],      # Anzahl_Räume
-                        estate_data["Level"],                # Etage
-                        estate_data["Year of Construction"], # Baujahr
-                        estate_data["Elevator"],             # Aufzug (1 = Ja, 0 = Nein)
-                        estate_data["Parking"],              # Parkplaetze
-                        estate_data["Kitchen"],              # Kueche
-                        estate_data["Balcony"],              # Balkon
-                        estate_data["Garden"],               # Garten
-                        estate_data["Terrace"],              # Terrasse
-                        estate_data["Energy Source"]         # Energie
-)
+                    if kauf:
+                        # Alle relevanten Daten zusammenfassen
+                        insert_data = (
+                            estate_data["PLZ"],                  # FK_Postleitzahl
+                            estate_data["Price"],                # Preis
+                            estate_data["Room Size (m²)"],       # Groesse in qm
+                            estate_data["Number of Rooms"],      # Anzahl_Räume
+                            estate_data["Level"],                # Etage
+                            estate_data["Year of Construction"], # Baujahr
+                            estate_data["Elevator"],             # Aufzug (1 = Ja, 0 = Nein)
+                            estate_data["Parking"],              # Parkplaetze
+                            estate_data["Kitchen"],              # Kueche
+                            estate_data["Balcony"],              # Balkon
+                            estate_data["Garden"],               # Garten
+                            estate_data["Terrace"],              # Terrasse
+                            estate_data["Energy Source"]         # Energie
+                        )
                     
-                    # SQL-Befehl mit Platzhaltern
-                    insert = """
-                            INSERT IGNORE INTO Immobilie (
-                                FK_Postleitzahl, Preis_warm, Preis_kalt, Groesse, Anzahl_Räume, 
-                                Etage, Baujahr, Aufzug, Parkplaetze, Kueche, Balkon, Garten, Terrasse, Energie
-                            ) 
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    """
+                        # SQL-Befehl mit Platzhaltern
+                        insert = """
+                                INSERT IGNORE INTO Immobilie_Kauf (
+                                    FK_Postleitzahl, Preis, Groesse, Anzahl_Räume, 
+                                    Etage, Baujahr, Aufzug, Parkplaetze, Kueche, Balkon, Garten, Terrasse, Energie
+                                ) 
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        """
 
-                    # Befehl ausführen
-                    cursor.execute(insert, insert_data)
-                    db.commit()
+                        # Befehl ausführen
+                        cursor.execute(insert, insert_data)
+                        db.commit()
+
+                    else:
+                        # Alle relevanten Daten zusammenfassen
+                        insert_data = (
+                            estate_data["PLZ"],                  # FK_Postleitzahl
+                            estate_data["Warm Price"],           # Preis_warm
+                            estate_data["Cold Price"],           # Preis_kalt
+                            estate_data["Room Size (m²)"],       # Groesse in qm
+                            estate_data["Number of Rooms"],      # Anzahl_Räume
+                            estate_data["Level"],                # Etage
+                            estate_data["Year of Construction"], # Baujahr
+                            estate_data["Elevator"],             # Aufzug (1 = Ja, 0 = Nein)
+                            estate_data["Parking"],              # Parkplaetze
+                            estate_data["Kitchen"],              # Kueche
+                            estate_data["Balcony"],              # Balkon
+                            estate_data["Garden"],               # Garten
+                            estate_data["Terrace"],              # Terrasse
+                            estate_data["Energy Source"]         # Energie
+                        )
+                    
+                        # SQL-Befehl mit Platzhaltern
+                        insert = """
+                                INSERT IGNORE INTO Immobilie (
+                                    FK_Postleitzahl, Preis_warm, Preis_kalt, Groesse, Anzahl_Räume, 
+                                    Etage, Baujahr, Aufzug, Parkplaetze, Kueche, Balkon, Garten, Terrasse, Energie
+                                ) 
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        """
+
+                        # Befehl ausführen
+                        cursor.execute(insert, insert_data)
+                        db.commit()
 
 # Verbindung zu MySQL herstellen
 def connect():
