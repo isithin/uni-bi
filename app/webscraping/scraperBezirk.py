@@ -47,7 +47,7 @@ def scrape(db, cursor):
             bezirk = html.unescape(bezirk_match.group(1).strip())
     
         elif fläche_match and bezirk:
-            fläche = html.unescape(fläche_match.group(1).strip())
+            fläche = html.unescape(fläche_match.group(1).strip()).replace(",", ".")
             berliner_bezirke[bezirk].append(fläche)
 
     # Excel-Datei einlesen
