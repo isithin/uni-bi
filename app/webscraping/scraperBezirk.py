@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import re
+import html
 from urllib.request import urlopen
 import mysql.connector
 
@@ -24,16 +26,50 @@ def scrape(db, cursor):
         "Reinickendorf": []
     }
 
+    url = "https://de.wikipedia.org/wiki/Verwaltungsgliederung_Berlins"
+    page = urlopen(url)
+    html_bytes = page.read()
+    htmlText = html_bytes.decode("utf-8")
+
+    # Reguläre Ausdrücke für Bezirke, Ortsteile und PLZ
+    bezirk_pattern = re.compile(r"<td style=\"text-align:left\"><span style=\"display:none;\">(.{5,26})<\/span>")
+    fläche_pattern = re.compile(r"<td>(?:<span style=\"visibility:hidden;\">0<\/span>)?(\d{2,3},\d\d)")
+
+    bezirk = None
+    fläche = None
+
+    # HTML Zeilenweise durchsuchen
+    for line in htmlText.split("\n"):
+        bezirk_match = bezirk_pattern.search(line)
+        fläche_match = fläche_pattern.search(line)
+
+        if bezirk_match:
+            bezirk = html.unescape(bezirk_match.group(1).strip())
+    
+        elif fläche_match and bezirk:
+            fläche = html.unescape(fläche_match.group(1).strip())
+            berliner_bezirke[bezirk].append(fläche)
+
     # Excel-Datei einlesen
-    file_path_durchschnittsalter = r"https://download.statistik-berlin-brandenburg.de/8b004f55d4a74860/f1f0744a299e/SB_A01-05-00_2024h01_BE.xlsx"
+    file_path_demografie = r"https://download.statistik-berlin-brandenburg.de/8b004f55d4a74860/f1f0744a299e/SB_A01-05-00_2024h01_BE.xlsx"
     file_path_finanzen = r"https://download.statistik-berlin-brandenburg.de/e46d505407f9f2ab/665ce591962b/AfS_Tabellen_Sozialbericht_2022_BBB.xlsx"
     file_path_kriminalität = r"https://www.kriminalitaetsatlas.berlin.de/K-Atlas/bezirke/Fallzahlen%26HZ%202014-2023.xlsx"
 
-    df_durchschnittsalter = pd.read_excel(file_path_durchschnittsalter, sheet_name="T3 T4", skiprows=45, usecols="C:N", engine="openpyxl")
+    df_demografie = pd.read_excel(file_path_demografie, sheet_name="T3 T4", skiprows=2, usecols="C:N", nrows=39, engine="openpyxl")
+    df_durchschnittsalter = pd.read_excel(file_path_demografie, sheet_name="T3 T4", skiprows=45, usecols="C:N", engine="openpyxl")
     df_armutsgef = pd.read_excel(file_path_finanzen, sheet_name="A1a I Armutsgef regional", usecols="B:T", engine="openpyxl")
     df_geringqualifizierte = pd.read_excel(file_path_finanzen, sheet_name="D1 Geringqualifizierte regional", usecols="B:T", engine="openpyxl")
     df_erwerbslosigkeit = pd.read_excel(file_path_finanzen, sheet_name="E4 Erwerbsl. Haushalte regional", usecols="B:T", engine="openpyxl")
     df_kriminalität = pd.read_excel(file_path_kriminalität, sheet_name="Fallzahlen_2023", skiprows=4)
+
+    # Einwohnerzahl und Anzahl Ausländer 2024:
+    for column in df_demografie.columns:
+        for bezirk in berliner_bezirke:
+            if bezirk[:3] == column[:3]:  # Die ersten 3 Buchstaben des Bezirk-Namens mit der Spalten-Überschrift vergleichen
+                ausländer = df_demografie[column].iloc[25]
+                einwohner = df_demografie[column].iloc[-1]  # Letzte Zeile dieser Spalte
+                berliner_bezirke[bezirk].append(einwohner)
+                berliner_bezirke[bezirk].append(ausländer)
 
     # Durchschnittsalter der Einwohnerinnen und Einwohner in Berlin 2024:
     for column in df_durchschnittsalter.columns:
@@ -87,7 +123,7 @@ def scrape(db, cursor):
     # SQL-Befehl mit Platzhaltern
     insert = """
     INSERT IGNORE INTO Bezirk (
-        Name, Durchschnittsalter, Armutsgefährdungsquote, Geringqualifikationsquote,
+        Name, Fläche_Quadratkilometer, Einwohner, Auslaender, Durchschnittsalter, Armutsgefährdungsquote, Geringqualifikationsquote,
         Erwerbslosigkeitsquote, Straftaten_gesamt, Raub, Strassenraub,
         Koerperverletzung_gesamt, Gefaehrliche_Koerperverletzung, Freiheitsberaubung,
         Diebstahl_gesamt, Diebstahl_Kraftwagen, Diebstahl_Kfz, Fahrraddiebstahl,
@@ -95,7 +131,7 @@ def scrape(db, cursor):
         Sachbeschaedigung_gesamt, Sachbeschaedigung_Graffiti,
         Rauschgiftdelikte, Kieztaten
     ) 
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     # Daten aus dem Dictionary in die Tabelle einfügen
     for bezirk, daten_liste in berliner_bezirke.items():
