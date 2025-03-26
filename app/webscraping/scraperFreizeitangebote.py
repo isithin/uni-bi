@@ -13,7 +13,7 @@ def scrape(db, cursor):
     BERLIN_CENTER = "52.5200,13.4050"
     RADIUS = 20000  # 20 km
 
-    request_limit = 2400
+    request_limit = 1000
     request_count = 0
 
     # Overpass API Abfrage (z. B. Museums + Parks + Spielplätze)
