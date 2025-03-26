@@ -56,10 +56,12 @@ def scrape(db, cursor):
                 )
                 # SQL-Befehl mit Platzhaltern
                 insert = """
-                        INSERT IGNORE INTO Postleitgebiet (
-                            Postleitzahl, FK_Ortsteil
-                        ) 
+                        INSERT INTO Postleitgebiet (
+                        Postleitzahl, FK_Ortsteil
+                    ) 
                     VALUES (%s, %s)
+                    ON DUPLICATE KEY UPDATE
+                        FK_Ortsteil = VALUES(FK_Ortsteil);
                 """
                 cursor.execute(insert, insert_data)
 
