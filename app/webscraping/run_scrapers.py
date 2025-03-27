@@ -24,6 +24,11 @@ if __name__ == "__main__":
     scraperPostleitgebiet.run()
     print("")
 
+    # Haltestellen scraper starten
+    print("📡 Scraping Haltestellen...")
+    scraperHaltestellen.run()
+    print("")
+
     # Supermarkt scraper starten
     print("📡 Scraping Supermärkte...")
     scraperSupermarkt.run()
@@ -37,12 +42,6 @@ if __name__ == "__main__":
     # Freizeitangebote scraper starten
     print("📡 Scraping Freizeitangebote...")
     scraperFreizeitangebote.run()
-    print("")
-
-
-    # Haltestellen scraper starten
-    print("📡 Scraping Haltestellen...")
-    scraperHaltestellen.run()
     print("")
 
 
