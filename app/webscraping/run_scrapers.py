@@ -20,7 +20,7 @@ if __name__ == "__main__":
     print("")
 
     # Postleitgebiet scraper starten
-    print("📡 Scraping Wohnungsboerse...")
+    print("📡 Scraping Postleitgebiet...")
     scraperPostleitgebiet.run()
     print("")
 
