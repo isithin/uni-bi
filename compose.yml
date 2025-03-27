@@ -55,6 +55,8 @@ services:
       - GF_DATABASE_NAME=grafana
       - GF_DATABASE_USER=${GF_DATABASE_USER}
       - GF_DATABASE_PASSWORD=${GF_DATABASE_PASSWORD}
+      - GF_FEATURE_TOGGLES_ENABLE=featureToggleAdminPage, regressionTransformation
+      - GF_FEATURE_MANAGEMENT_ALLOW_EDITING=true
     networks:
       - bi_net
 
