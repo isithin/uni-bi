@@ -149,7 +149,7 @@ def create_table(cursor):
         """
         CREATE TABLE IF NOT EXISTS Immobilie_Kauf (
             ID                   INT NOT NULL AUTO_INCREMENT,
-            FK_Postleitzahl      VARCHAR(10) NOT NULL,
+            FK_Postleitzahl      VARCHAR(50) NOT NULL,
             Preis                DECIMAL(12,2),
             Groesse              INT,
             Anzahl_Räume         INT,
