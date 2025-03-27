@@ -13,8 +13,6 @@ def scrape(db, cursor):
     BERLIN_CENTER = "52.5200,13.4050"
     RADIUS = 20000  # 20 km
 
-    request_limit = 1000
-    request_count = 0
 
     # Overpass API Abfrage (z. B. Museums + Parks + Spielplätze)
     query = f"""
@@ -24,6 +22,38 @@ def scrape(db, cursor):
       node["amenity"="cinema"](area.searchArea);
       node["amenity"="theatre"](area.searchArea);
       node["amenity"="nightclub"](area.searchArea);
+    );
+    out body;   
+    """
+
+    url = "https://overpass-api.de/api/interpreter"
+    response = requests.post(url, data={"data": query})
+
+    if response.status_code == 200:
+        data = response.json()
+        for element in data["elements"]:
+            name = element.get("tags", {}).get("name", "Unbekannt")
+            typ = element.get("tags", {}).get("amenity") or element.get("tags", {}).get("leisure")
+            plz = element.get("tags", {}).get("addr:postcode") or get_postal_code(element["lat"], element["lon"])
+
+            sql = """
+                    INSERT IGNORE INTO Freizeitangebot (FK_Postleitzahl, Name, Art) 
+                    VALUES (%s, %s, %s)
+                    ON DUPLICATE KEY UPDATE Name = VALUES(Name)
+             """
+            cursor.execute(sql, [plz, name, typ])
+            db.commit()
+
+    else:
+        print("Fehler beim Abrufen der Daten.")
+
+    
+    request_limit = 1500
+    request_count = 0
+    query = f"""
+    [out:json];
+    area[name="Berlin"]->.searchArea;
+    (
       node["leisure"="playground"](area.searchArea);
     );
     out body;   
