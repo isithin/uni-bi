@@ -298,6 +298,13 @@ def scrape(db, cursor, kauf):
                                     or "ebk" in match.lower()
                                 ):
                                     estate_data["Kitchen"] = True
+                                elif (
+                                    "garage" in match.lower()
+                                    or "parkplätze" in match.lower()
+                                    or "parkplatz" in match.lower()
+                                    or "carport" in match.lower()
+                                    ):
+                                    estate_data["Parking"] = True
                                 else:
                                     amenities.append(match.strip())
 
