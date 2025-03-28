@@ -302,6 +302,7 @@ def scrape(db, cursor, kauf):
                                     "garage" in match.lower()
                                     or "parkplätze" in match.lower()
                                     or "parkplatz" in match.lower()
+                                    or "carport" in match.lower()
                                     ):
                                     estate_data["Parking"] = True
                                 else:
