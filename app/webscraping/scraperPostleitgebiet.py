@@ -18,7 +18,7 @@ def scrape(db, cursor):
 
     # Reguläre Ausdrücke für Bezirke, Ortsteile und PLZ
     bezirk_pattern = re.compile(r"<h3 id=.*>(?:Die Postleitzahlen von )?(.*?)<\/h3>")
-    ortsteil_pattern = re.compile(r"<h4>(?:PLZ vom Ortsteil )?(.*?)<\/h4>")
+    ortsteil_pattern = re.compile(r"<h4>(?:[PLZ, Postleitzahl] vom Ortsteil )?(.*?)<\/h4>")
     plz_pattern = re.compile(r"<li>(\d{5})<\/li>")
 
     bezirk = None
