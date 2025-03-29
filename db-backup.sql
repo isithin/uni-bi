@@ -116,7 +116,7 @@ CREATE TABLE `alert_configuration_history` (
 
 LOCK TABLES `alert_configuration_history` WRITE;
 /*!40000 ALTER TABLE `alert_configuration_history` DISABLE KEYS */;
-INSERT INTO `alert_configuration_history` VALUES (1,1,'{\n	\"alertmanager_config\": {\n		\"route\": {\n			\"receiver\": \"grafana-default-email\",\n			\"group_by\": [\"grafana_folder\", \"alertname\"]\n		},\n		\"receivers\": [{\n			\"name\": \"grafana-default-email\",\n			\"grafana_managed_receiver_configs\": [{\n				\"uid\": \"\",\n				\"name\": \"email receiver\",\n				\"type\": \"email\",\n				\"settings\": {\n					\"addresses\": \"<example@email.com>\"\n				}\n			}]\n		}]\n	}\n}\n','ed091fbc8c639dd8063190127c806946','v1',1742554078,1,1743199595);
+INSERT INTO `alert_configuration_history` VALUES (1,1,'{\n	\"alertmanager_config\": {\n		\"route\": {\n			\"receiver\": \"grafana-default-email\",\n			\"group_by\": [\"grafana_folder\", \"alertname\"]\n		},\n		\"receivers\": [{\n			\"name\": \"grafana-default-email\",\n			\"grafana_managed_receiver_configs\": [{\n				\"uid\": \"\",\n				\"name\": \"email receiver\",\n				\"type\": \"email\",\n				\"settings\": {\n					\"addresses\": \"<example@email.com>\"\n				}\n			}]\n		}]\n	}\n}\n','ed091fbc8c639dd8063190127c806946','v1',1742554078,1,1743240709);
 /*!40000 ALTER TABLE `alert_configuration_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -561,7 +561,7 @@ CREATE TABLE `cache_data` (
 
 LOCK TABLES `cache_data` WRITE;
 /*!40000 ALTER TABLE `cache_data` DISABLE KEYS */;
-INSERT INTO `cache_data` VALUES ('id-token-0-user-1',_binary 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImlkLTIwMjUtMDMtZXMyNTYiLCJ0eXAiOiJqd3QifQ.eyJhdWQiOiJvcmc6MCIsImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0IiwiZXhwIjoxNzQzMjAwMjYzLCJpYXQiOjE3NDMxOTk2NjMsImlkZW50aWZpZXIiOiJhZWdpMXdqeXJwcGZrYiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMC8iLCJuYW1lIjoiYWRtaW4iLCJuYW1lc3BhY2UiOiJvcmctMCIsInN1YiI6InVzZXI6MSIsInR5cGUiOiJ1c2VyIiwidXNlcm5hbWUiOiJhZG1pbiJ9.LGT8LGEH2sXkFKGuB5oR-b1FxpA40XPU3bD18trlmlD0xT6pLw4UYnIC6TPIG1-3EhLRqlsPKUhpZlB24Tcy-g',569,1743199663),('id-token-1-user-1',_binary 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImlkLTIwMjUtMDMtZXMyNTYiLCJ0eXAiOiJqd3QifQ.eyJhdWQiOiJvcmc6MSIsImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0IiwiZXhwIjoxNzQzMjAwMjYzLCJpYXQiOjE3NDMxOTk2NjMsImlkZW50aWZpZXIiOiJhZWdpMXdqeXJwcGZrYiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMC8iLCJuYW1lIjoiYWRtaW4iLCJuYW1lc3BhY2UiOiJkZWZhdWx0Iiwic3ViIjoidXNlcjoxIiwidHlwZSI6InVzZXIiLCJ1c2VybmFtZSI6ImFkbWluIn0.SAqkq1kKshj1xHSsSSMArgiBw3dhUlktLz4HpglYZBkDEKEtmoSOrLn-D0D81uX922VoPqf5dMbVyjqnB61w7w',569,1743199663);
+INSERT INTO `cache_data` VALUES ('id-token-0-user-1',_binary 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImlkLTIwMjUtMDMtZXMyNTYiLCJ0eXAiOiJqd3QifQ.eyJhdWQiOiJvcmc6MCIsImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0IiwiZXhwIjoxNzQzMjQxMzE5LCJpYXQiOjE3NDMyNDA3MTksImlkZW50aWZpZXIiOiJhZWdpMXdqeXJwcGZrYiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMC8iLCJuYW1lIjoiYWRtaW4iLCJuYW1lc3BhY2UiOiJvcmctMCIsInN1YiI6InVzZXI6MSIsInR5cGUiOiJ1c2VyIiwidXNlcm5hbWUiOiJhZG1pbiJ9.7LUrNv5qggZCH4NXGJSzg6QFB-LkL9bU7q5r8xw8mKrAs6yrsB4xGqLDn_g2mY0VKcHSmUR9KcxonKt7e5LUaA',569,1743240719),('id-token-1-user-1',_binary 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImlkLTIwMjUtMDMtZXMyNTYiLCJ0eXAiOiJqd3QifQ.eyJhdWQiOiJvcmc6MSIsImVtYWlsIjoiYWRtaW5AbG9jYWxob3N0IiwiZXhwIjoxNzQzMjQxMzE5LCJpYXQiOjE3NDMyNDA3MTksImlkZW50aWZpZXIiOiJhZWdpMXdqeXJwcGZrYiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMC8iLCJuYW1lIjoiYWRtaW4iLCJuYW1lc3BhY2UiOiJkZWZhdWx0Iiwic3ViIjoidXNlcjoxIiwidHlwZSI6InVzZXIiLCJ1c2VybmFtZSI6ImFkbWluIn0.Pu4jbF11Qp-8huIhVJOADtGgs53ul66ggB879HE3NjUxtf45QHq6fEpspmTGIeRC0XKlTc9qQAp2L7OnV-03WQ',569,1743240719);
 /*!40000 ALTER TABLE `cache_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1165,7 +1165,7 @@ CREATE TABLE `kv_store` (
 
 LOCK TABLES `kv_store` WRITE;
 /*!40000 ALTER TABLE `kv_store` DISABLE KEYS */;
-INSERT INTO `kv_store` VALUES (1,0,'ngalert.migration','currentAlertingType','Legacy','2025-03-21 10:47:49','2025-03-21 10:47:49'),(2,0,'datasource','secretMigrationStatus','compatible','2025-03-21 10:47:58','2025-03-21 10:47:58'),(3,0,'plugin.angularpatterns','angular_patterns','[{\"Name\":\"PanelCtrl\",\"Pattern\":\"PanelCtrl\",\"Type\":\"contains\"},{\"Name\":\"ConfigCtrl\",\"Pattern\":\"ConfigCtrl\",\"Type\":\"contains\"},{\"Name\":\"app/plugins/sdk\",\"Pattern\":\"app/plugins/sdk\",\"Type\":\"contains\"},{\"Name\":\"Angular Specific Function\",\"Pattern\":\"angular.isNumber(\",\"Type\":\"contains\"},{\"Name\":\"ctrl.annotation\",\"Pattern\":\"ctrl.annotation\",\"Type\":\"contains\"},{\"Name\":\"QueryCtrl\",\"Pattern\":\"[\\\"\']QueryCtrl[\\\"\']\",\"Type\":\"regex\"}]','2025-03-21 10:47:58','2025-03-21 10:47:58'),(4,0,'plugin.angularpatterns','last_updated','2025-03-27T21:34:52Z','2025-03-21 10:47:58','2025-03-27 21:34:53'),(5,0,'plugin.publickeys','key-7e4d0c6a708866e7','-----BEGIN PGP PUBLIC KEY BLOCK-----\r\nVersion: OpenPGP.js v4.10.1\r\nComment: https://openpgpjs.org\r\n\r\nxpMEXpTXXxMFK4EEACMEIwQBiOUQhvGbDLvndE0fEXaR0908wXzPGFpf0P0Z\r\nHJ06tsq+0higIYHp7WTNJVEZtcwoYLcPRGaa9OQqbUU63BEyZdgAkPTz3RFd\r\n5+TkDWZizDcaVFhzbDd500yTwexrpIrdInwC/jrgs7Zy/15h8KA59XXUkdmT\r\nYB6TR+OA9RKME+dCJozNGUdyYWZhbmEgPGVuZ0BncmFmYW5hLmNvbT7CvAQQ\r\nEwoAIAUCXpTXXwYLCQcIAwIEFQgKAgQWAgEAAhkBAhsDAh4BAAoJEH5NDGpw\r\niGbnaWoCCQGQ3SQnCkRWrG6XrMkXOKfDTX2ow9fuoErN46BeKmLM4f1EkDZQ\r\nTpq3SE8+My8B5BIH3SOcBeKzi3S57JHGBdFA+wIJAYWMrJNIvw8GeXne+oUo\r\nNzzACdvfqXAZEp/HFMQhCKfEoWGJE8d2YmwY2+3GufVRTI5lQnZOHLE8L/Vc\r\n1S5MXESjzpcEXpTXXxIFK4EEACMEIwQBtHX/SD5Qm3v4V92qpaIZQgtTX0sT\r\ncFPjYWAHqsQ1iENrYN/vg1wU3ADlYATvydOQYvkTyT/tbDvx2Fse8PL84MQA\r\nYKKQ6AJ3gLVvmeouZdU03YoV4MYaT8KbnJUkZQZkqdz2riOlySNI9CG3oYmv\r\nomjUAtzgAgnCcurfGLZkkMxlmY8DAQoJwqQEGBMKAAkFAl6U118CGwwACgkQ\r\nfk0ManCIZuc0jAIJAVw2xdLr4ZQqPUhubrUyFcqlWoW8dQoQagwO8s8ubmby\r\nKuLA9FWJkfuuRQr+O9gHkDVCez3aism7zmJBqIOi38aNAgjJ3bo6leSS2jR/\r\nx5NqiKVi83tiXDPncDQYPymOnMhW0l7CVA7wj75HrFvvlRI/4MArlbsZ2tBn\r\nN1c5v9v/4h6qeA==\r\n=DNbR\r\n-----END PGP PUBLIC KEY BLOCK-----\r\n','2025-03-21 10:47:58','2025-03-21 10:47:58'),(6,0,'plugin.angularpatterns','etag','\"1a8-1yOry0c74BKAzc7BUbZdNV0sYic\"','2025-03-21 10:47:58','2025-03-21 10:47:58'),(7,0,'plugin.publickeys','last_updated','2025-03-21T10:47:58Z','2025-03-21 10:47:58','2025-03-21 10:47:58'),(8,1,'alertmanager','notifications','','2025-03-21 11:07:55','2025-03-21 11:07:55'),(9,1,'alertmanager','silences','','2025-03-21 11:07:55','2025-03-21 11:07:55');
+INSERT INTO `kv_store` VALUES (1,0,'ngalert.migration','currentAlertingType','Legacy','2025-03-21 10:47:49','2025-03-21 10:47:49'),(2,0,'datasource','secretMigrationStatus','compatible','2025-03-21 10:47:58','2025-03-21 10:47:58'),(3,0,'plugin.angularpatterns','angular_patterns','[{\"Name\":\"PanelCtrl\",\"Pattern\":\"PanelCtrl\",\"Type\":\"contains\"},{\"Name\":\"ConfigCtrl\",\"Pattern\":\"ConfigCtrl\",\"Type\":\"contains\"},{\"Name\":\"app/plugins/sdk\",\"Pattern\":\"app/plugins/sdk\",\"Type\":\"contains\"},{\"Name\":\"Angular Specific Function\",\"Pattern\":\"angular.isNumber(\",\"Type\":\"contains\"},{\"Name\":\"ctrl.annotation\",\"Pattern\":\"ctrl.annotation\",\"Type\":\"contains\"},{\"Name\":\"QueryCtrl\",\"Pattern\":\"[\\\"\']QueryCtrl[\\\"\']\",\"Type\":\"regex\"}]','2025-03-21 10:47:58','2025-03-21 10:47:58'),(4,0,'plugin.angularpatterns','last_updated','2025-03-29T09:31:24Z','2025-03-21 10:47:58','2025-03-29 09:31:24'),(5,0,'plugin.publickeys','key-7e4d0c6a708866e7','-----BEGIN PGP PUBLIC KEY BLOCK-----\r\nVersion: OpenPGP.js v4.10.1\r\nComment: https://openpgpjs.org\r\n\r\nxpMEXpTXXxMFK4EEACMEIwQBiOUQhvGbDLvndE0fEXaR0908wXzPGFpf0P0Z\r\nHJ06tsq+0higIYHp7WTNJVEZtcwoYLcPRGaa9OQqbUU63BEyZdgAkPTz3RFd\r\n5+TkDWZizDcaVFhzbDd500yTwexrpIrdInwC/jrgs7Zy/15h8KA59XXUkdmT\r\nYB6TR+OA9RKME+dCJozNGUdyYWZhbmEgPGVuZ0BncmFmYW5hLmNvbT7CvAQQ\r\nEwoAIAUCXpTXXwYLCQcIAwIEFQgKAgQWAgEAAhkBAhsDAh4BAAoJEH5NDGpw\r\niGbnaWoCCQGQ3SQnCkRWrG6XrMkXOKfDTX2ow9fuoErN46BeKmLM4f1EkDZQ\r\nTpq3SE8+My8B5BIH3SOcBeKzi3S57JHGBdFA+wIJAYWMrJNIvw8GeXne+oUo\r\nNzzACdvfqXAZEp/HFMQhCKfEoWGJE8d2YmwY2+3GufVRTI5lQnZOHLE8L/Vc\r\n1S5MXESjzpcEXpTXXxIFK4EEACMEIwQBtHX/SD5Qm3v4V92qpaIZQgtTX0sT\r\ncFPjYWAHqsQ1iENrYN/vg1wU3ADlYATvydOQYvkTyT/tbDvx2Fse8PL84MQA\r\nYKKQ6AJ3gLVvmeouZdU03YoV4MYaT8KbnJUkZQZkqdz2riOlySNI9CG3oYmv\r\nomjUAtzgAgnCcurfGLZkkMxlmY8DAQoJwqQEGBMKAAkFAl6U118CGwwACgkQ\r\nfk0ManCIZuc0jAIJAVw2xdLr4ZQqPUhubrUyFcqlWoW8dQoQagwO8s8ubmby\r\nKuLA9FWJkfuuRQr+O9gHkDVCez3aism7zmJBqIOi38aNAgjJ3bo6leSS2jR/\r\nx5NqiKVi83tiXDPncDQYPymOnMhW0l7CVA7wj75HrFvvlRI/4MArlbsZ2tBn\r\nN1c5v9v/4h6qeA==\r\n=DNbR\r\n-----END PGP PUBLIC KEY BLOCK-----\r\n','2025-03-21 10:47:58','2025-03-21 10:47:58'),(6,0,'plugin.angularpatterns','etag','\"1a8-1yOry0c74BKAzc7BUbZdNV0sYic\"','2025-03-21 10:47:58','2025-03-21 10:47:58'),(7,0,'plugin.publickeys','last_updated','2025-03-21T10:47:58Z','2025-03-21 10:47:58','2025-03-21 10:47:58'),(8,1,'alertmanager','notifications','','2025-03-21 11:07:55','2025-03-21 11:07:55'),(9,1,'alertmanager','silences','','2025-03-21 11:07:55','2025-03-21 11:07:55');
 /*!40000 ALTER TABLE `kv_store` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1943,7 +1943,7 @@ CREATE TABLE `server_lock` (
   `last_execution` bigint NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UQE_server_lock_operation_uid` (`operation_uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1952,7 +1952,7 @@ CREATE TABLE `server_lock` (
 
 LOCK TABLES `server_lock` WRITE;
 /*!40000 ALTER TABLE `server_lock` DISABLE KEYS */;
-INSERT INTO `server_lock` VALUES (1,'cleanup expired auth tokens',11,1743191381),(4,'delete old login attempts',533,1743197234),(9,'cleanup old anon devices',11,1743176981);
+INSERT INTO `server_lock` VALUES (1,'cleanup expired auth tokens',12,1743240684),(4,'delete old login attempts',533,1743197234),(9,'cleanup old anon devices',11,1743176981);
 /*!40000 ALTER TABLE `server_lock` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2325,7 +2325,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,0,'admin','admin@localhost','','11d0187c3c1a1f278a9385e028e3cc01a7fdc733ff84d1faac0ed5d97a87e2462340ccc78418ab3ebbd78eee968cf0ec5377','f7XBuxc0Pu','GLgrDd8dhL','',1,1,0,'','2025-03-21 10:47:55','2025-03-26 03:17:45',1,'2025-03-28 22:07:43',0,0,'aegi1wjyrppfkb');
+INSERT INTO `user` VALUES (1,0,'admin','admin@localhost','','11d0187c3c1a1f278a9385e028e3cc01a7fdc733ff84d1faac0ed5d97a87e2462340ccc78418ab3ebbd78eee968cf0ec5377','f7XBuxc0Pu','GLgrDd8dhL','',1,1,0,'','2025-03-21 10:47:55','2025-03-26 03:17:45',1,'2025-03-29 09:31:59',0,0,'aegi1wjyrppfkb');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2397,7 +2397,7 @@ CREATE TABLE `user_auth_token` (
 
 LOCK TABLES `user_auth_token` WRITE;
 /*!40000 ALTER TABLE `user_auth_token` DISABLE KEYS */;
-INSERT INTO `user_auth_token` VALUES (2,1,'69fd3ad9839546cb5f584a532183d699e12e2718e9877b7a5ef0e676fa9b8dbf','da4f535d5faaa75d5f9809acd1df3631a2be887cc3c4f7b325fe76c80d5eff2a','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36','10.89.0.4',1,1743199663,1743199663,1742556931,1742556931,0,0);
+INSERT INTO `user_auth_token` VALUES (2,1,'373787e0095939111bc3b8e2772d4725b6a28a8c4b3e44fef896e73c74be2c0a','69fd3ad9839546cb5f584a532183d699e12e2718e9877b7a5ef0e676fa9b8dbf','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36','10.89.0.7',1,1743240719,1743240719,1742556931,1742556931,0,0);
 /*!40000 ALTER TABLE `user_auth_token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2475,4 +2475,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-28 22:12:16
+-- Dump completed on 2025-03-29  9:32:23
