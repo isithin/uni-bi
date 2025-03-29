@@ -14,6 +14,11 @@ if __name__ == "__main__":
     # scraperImmowelt.run()
     # print("")
 
+    # Freizeitangebote scraper starten
+    print("📡 Scraping Freizeitangebote...")
+    scraperFreizeitangebote.run()
+    print("")
+
     # Bezirk scraper starten
     print("📡 Scraping Bezirke...")
     scraperBezirk.run()
@@ -39,10 +44,6 @@ if __name__ == "__main__":
     scraperWohnungsboerse.run()
     print("")
 
-    # Freizeitangebote scraper starten
-    print("📡 Scraping Freizeitangebote...")
-    scraperFreizeitangebote.run()
-    print("")
 
 
     # Ergebnisse anzeigen
