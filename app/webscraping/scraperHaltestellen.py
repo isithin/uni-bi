@@ -2,127 +2,99 @@ import re
 import os
 from urllib.request import urlopen
 import mysql.connector
-import html
+import requests
 
 def run():
     db=connect()
     cursor = db.cursor()
-    scrape_Bahnhöfe_Haltepunkte(db, cursor)
-    scrape_UBahnhöfe(db, cursor)
+    scrape_API(db, cursor)
 
-def scrape_Bahnhöfe_Haltepunkte(db, cursor):
-    url = "https://de.wikipedia.org/wiki/Liste_der_Bahnh%C3%B6fe_und_Haltepunkte_in_Berlin"
-    page = urlopen(url)
-    html_bytes = page.read()
-    htmlText = html_bytes.decode("utf-8")
+# Overpass API-Abfragefunktion
+def fetch_osm_data(query):
+    url = "http://overpass-api.de/api/interpreter"
+    payload = f"[out:json][timeout:25];{query}" 
+    response = requests.get(url, params={"data": payload})
+    response.raise_for_status()  # Fehler ausgeben, falls HTTP-Fehler auftreten
+    return response.json()
 
-    # Reguläre Ausdrücke für Name, Ortsteil, Preisklasse und Typ (später unterteilt in booleans)
-    name_pattern = re.compile(r"<td><a href=\"\/wiki\/Bahnhof.*\">(.*)<\/a>")
-    bertriebsart_pattern = re.compile(r"<td>([B,H][f,p])<\/td>")
-    ortsteil_pattern = re.compile(r"<td><a href=\"\/wiki\/(?!Bahnstrecke).*\">(.*)<\/a><\/td>")
-    preisklasse_pattern = re.compile(r"<td>(\d)<\/td>")
-    typ_pattern = re.compile(r"<td>((?:[S, R, F]){1,5})")
-    # Break-Pattern, um am Ende der Tabelle mit Scrapen aufzuhören
-    break_pattern = re.compile(r"<p><b>Anmerkungen:</b>")
+# Hauptfunktion zum Scrapen
+def scrape_API(db, cursor):
 
-    name = None
-    betriebsart = None
-    ortsteil = None
-    preisklasse = None
-    typ = None
+    # Berlin als Suchbereich mit korrekter Syntax
+    berlin_area_query = """
+        area["name"="Berlin"]->.searchArea;
+    """
 
-    # HTML Zeilenweise durchsuchen
-    for line in htmlText.split("\n"):
-        if break_pattern.search(line):
-            break
-        name_match = name_pattern.search(line)
-        betriebsart_match = bertriebsart_pattern.search(line)
-        ortsteil_match = ortsteil_pattern.search(line)
-        preisklasse_match = preisklasse_pattern.search(line)
-        typ_match = typ_pattern.search(line)
+    # Korrekte Overpass-Abfragen für Bahnhöfe
+    queries = {
+        "U-Bahn": f"""
+            {berlin_area_query}
+            node(area.searchArea)["railway"="subway_entrance"];
+            out body;
+        """,
+        "S-Bahn": f"""
+            {berlin_area_query}
+            node(area.searchArea)["railway"="station"]["station"="light_rail"];
+            out body;
+        """,
+        "Regional- und Fernverkehr": f"""
+            {berlin_area_query}
+            node(area.searchArea)["railway"="station"]["station"="train"];
+            out body;
+        """,
+    }
 
-        if name_match:
-            name = html.unescape(name_match.group(1).strip())
+    # Dictionary zum Speichern der Daten
+    haltestellen = {}
 
-        elif betriebsart_match:
-            betriebsart = betriebsart_match.group(1).strip()
-            if betriebsart == "Bf": name = "Bahnhof " + name
-            if betriebsart == "Hp": name = "Haltepunkt " + name
-    
-        elif ortsteil_match:
-            ortsteil = html.unescape(ortsteil_match.group(1).strip())
+    for typ, query in queries.items():
+        print(f"🔎 Hole {typ}-Daten von OSM...")
+        data = fetch_osm_data(query)
+        # time.sleep(API_DELAY)  # Warten, um API-Limit nicht zu überschreiten
 
-        elif preisklasse_match:
-            preisklasse = html.unescape(preisklasse_match.group(1).strip())
+        for element in data.get("elements", []):
+            name = element["tags"].get("name")
+            plz = element.get("tags", {}).get("addr:postcode") or get_postal_code(element["lat"], element["lon"])
 
-        elif typ_match and ortsteil and name and preisklasse:
-            typ = html.unescape(typ_match.group(1).strip())
+            # Initialisiere Haltestelle, falls noch nicht in der Liste
+            if name not in haltestellen:
+                haltestellen[name] = {"PLZ": plz, "S_Bahn": 0, "Regionalverkehr": 0, "Fernverkehr": 0, "U_Bahn": 0}
 
-            insert_data = [name, ortsteil, preisklasse, 'S' in typ, 'R' in typ, 'F' in typ, False]
+            # Setze die richtigen Flags
+            if typ == "U-Bahn":
+                haltestellen[name]["U_Bahn"] = 1
+            elif typ == "S-Bahn":
+                haltestellen[name]["S_Bahn"] = 1
+            elif typ == "Regional- und Fernverkehr":
+                haltestellen[name]["Regionalverkehr"] = 1
+                haltestellen[name]["Fernverkehr"] = 1
 
-            insert = """
-                    INSERT IGNORE INTO Haltestelle (
-                        Name, FK_Ortsteil, Preisklasse, S_Bahn,
-                        Regionalverkehr, Fernverkehr, U_Bahn
-                    )
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-            """
-            cursor.execute(insert, insert_data)
-            db.commit()
+    # SQL-Insert-Statement
+    insert_sql = """
+        INSERT INTO Haltestelle (Name, FK_Postleitzahl, S_Bahn, Regionalverkehr, Fernverkehr, U_Bahn)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE 
+            S_Bahn = VALUES(S_Bahn), 
+            Regionalverkehr = VALUES(Regionalverkehr), 
+            Fernverkehr = VALUES(Fernverkehr), 
+            U_Bahn = VALUES(U_Bahn);
+    """
+    # Daten in die MySQL-Tabelle einfügen
+    for name, data in haltestellen.items():
+        cursor.execute(insert_sql, (name, data["PLZ"], data["S_Bahn"], data["Regionalverkehr"], data["Fernverkehr"], data["U_Bahn"]))
 
-def scrape_UBahnhöfe(db, cursor):
-    url = "https://de.wikipedia.org/wiki/Liste_der_Berliner_U-Bahnh%C3%B6fe"
-    page = urlopen(url)
-    html_bytes = page.read()
-    htmlText = html_bytes.decode("utf-8")
+    db.commit()
+    cursor.close()
+    db.close()
+    print("✅ Alle Haltestellen wurden erfolgreich gespeichert!")
 
-    # Reguläre Ausdrücke für Name, Ortsteil, Preisklasse und Typ (später unterteilt in booleans)
-    name_pattern = re.compile(r"<a href=\"\/wiki\/(?:U-)?Bahnhof.*\">(.*)<\/a>")
-    linie_pattern = re.compile(r"<td style=\"text-align:center\" data-sort-value=\"(.*)\"><span")
-    ortsteil_pattern = re.compile(r"<a href=\"\/wiki\/.*\">(.*)<\/a><\/td>")
-    # Ignore-Pattern, um stillgelegte U-Bahnhöfe zu ignorieren
-    ignore_pattern = re.compile(r"<tr class=\"hintergrundfarbe7\">")
-
-    name = None
-    ortsteil = None
-    ignore = False
-
-
-    # HTML Zeilenweise durchsuchen
-    for line in htmlText.split("\n"):
-        if ignore_pattern.search(line):
-            ignore = True
-        name_match = name_pattern.search(line)
-        linie_match = linie_pattern.search(line)
-        ortsteil_match = ortsteil_pattern.search(line)
-
-        if name_match:
-            name = "U-Bahnhof " + html.unescape(name_match.group(1).strip()).replace("Bahnhof ", "")
-
-
-        elif linie_match and name:
-            linie = html.unescape(linie_match.group(1).strip())
-            name = name + " (" + linie + ")"
-
-
-        elif ortsteil_match and name:
-            ortsteil = html.unescape(ortsteil_match.group(1).strip())
-            if ignore:
-                ignore = False
-                name = None
-            else:
-                insert_data = [name, ortsteil, False, False, False, True]
-
-                insert = """
-                        INSERT IGNORE INTO Haltestelle (
-                            Name, FK_Ortsteil, S_Bahn,
-                            Regionalverkehr, Fernverkehr, U_Bahn
-                        )
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                """
-                cursor.execute(insert, insert_data)
-                db.commit()
-                name = None
+def get_postal_code(lat, lon):
+    url = f"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}"
+    response = requests.get(url, headers={"User-Agent": "FreizeitScraper"})
+    data = response.json()
+    address = data.get("address", {})
+    if "Berlin" in address.get("city", "") or "Berlin" in address.get("state", ""):
+        return address.get("postcode", "Keine PLZ")
 
 
 # Verbindung zu MySQL herstellen
