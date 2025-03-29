@@ -2,7 +2,6 @@ FROM python:3.9
 
 RUN pip install --no-cache-dir mysql-connector-python
 RUN pip install pandas openpyxl sqlalchemy pymysql requests
-RUN apt update && apt -y install mysql-client
 
 ADD app /app
 
