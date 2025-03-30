@@ -290,7 +290,7 @@ CREATE TABLE `example` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -299,7 +299,7 @@ CREATE TABLE `example` (
 
 LOCK TABLES `example` WRITE;
 /*!40000 ALTER TABLE `example` DISABLE KEYS */;
-INSERT INTO `example` VALUES (1,'MiiiTest'),(2,'MiiiTest'),(3,'MiiiTest'),(4,'MiiiTest'),(5,'MiiiTest'),(6,'MiiiTest');
+INSERT INTO `example` VALUES (1,'MiiiTest'),(2,'MiiiTest'),(3,'MiiiTest'),(4,'MiiiTest'),(5,'MiiiTest'),(6,'MiiiTest'),(7,'MiiiTest'),(8,'MiiiTest');
 /*!40000 ALTER TABLE `example` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -312,4 +312,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-29 20:13:15
+-- Dump completed on 2025-03-30  4:44:47
