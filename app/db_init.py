@@ -187,7 +187,7 @@ def create_table(cursor):
         """
         CREATE TABLE IF NOT EXISTS Haltestelle (
             ID                   INT NOT NULL AUTO_INCREMENT,
-            Name                 VARCHAR(50),
+            Name                 VARCHAR(100),
             FK_Postleitzahl      VARCHAR(10) NOT NULL,
             S_Bahn               BOOlEAN,
             Regionalverkehr      BOOLEAN,
