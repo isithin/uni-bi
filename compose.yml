@@ -12,10 +12,15 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      command: >
+        bash -c "sleep 20
+        && mysql -u root -p${MYSQL_ROOT_PASSWORD} -P 3306 -h 127.0.0.1 grafana < /mnt/db-backup.sql"
     volumes:
       - ./mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
+      - ./app/grafana_dumps:/mnt
+# for debugging
+#    ports:
+#      - "33306:3306"
     networks:
       - bi_net
 
@@ -48,7 +53,7 @@ services:
     depends_on:
       - mysql
     ports:
-      - "3000:3000"
+      - "0.0.0.0:33000:3000"
     environment:
       - GF_DATABASE_TYPE=mysql
       - GF_DATABASE_HOST=mysql:3306
@@ -56,7 +61,7 @@ services:
       - GF_DATABASE_USER=${GF_DATABASE_USER}
       - GF_DATABASE_PASSWORD=${GF_DATABASE_PASSWORD}
       - GF_FEATURE_TOGGLES_ENABLE=featureToggleAdminPage, regressionTransformation
-      - GF_FEATURE_MANAGEMENT_ALLOW_EDITING=true
+      - GF_FEATURE_MANAGEMENT_ALLOW_EDITING=true    
     networks:
       - bi_net
 
